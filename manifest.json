@@ -1,0 +1,11 @@
+
+{
+  "short_name": "AnotaTreino",
+  "name": "Anota Treino",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "orientation": "portrait",
+  "scope": "/"
+}
