@@ -24,7 +24,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   { "id": "custom_ex_21", "name": "Rosca direta Barra W", "targetMuscles": ["Bíceps"], "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/08/Rosca-direta-com-barra-w.gif?resize=550%2C550&ssl=1" },
   { "id": "custom_ex_22", "name": "Rosca direta Barra reta", "targetMuscles": ["Bíceps"], "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/07/Rosca-Direta-com-Barra.gif?resize=550%2C550&ssl=1" },
   { "id": "custom_ex_23", "name": "Rosca alternada em pé", "targetMuscles": ["Bíceps", "Antebraço"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Rosca-Alternada-com-Halteres.gif" },
-  { "id": "custom_ex_24", "name": "Rosca martelo simultâneo", "targetMuscles": ["Bíceps", "Antebraço"], "gifUrl": "https://image.tuasaude.com/media/article/kr/cn/rosca-martelo_75628.gif?width=686&height=487" },
+  { "id": "custom_ex_24", "name": "Rosca martelo alternado", "targetMuscles": ["Bíceps", "Antebraço"], "gifUrl": "https://image.tuasaude.com/media/article/kr/cn/rosca-martelo_75628.gif?width=686&height=487" },
   { "id": "custom_ex_25", "name": "Rosca concentrada", "targetMuscles": ["Bíceps"], "gifUrl": "https://static.wixstatic.com/media/2edbed_796d605902f5410db0fc7a4263db4098~mv2.gif" },
   { "id": "custom_ex_26", "name": "Cadeira Extensora", "targetMuscles": ["Perna", "Quadríceps"], "gifUrl": "https://image.tuasaude.com/media/article/ov/fb/cadeira-extensora_75064.gif?width=686&height=487" },
   { "id": "custom_ex_27", "name": "Mesa Flexora Sentado", "targetMuscles": ["Perna", "Posterior"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/12/cadeira-flexora.gif" },
