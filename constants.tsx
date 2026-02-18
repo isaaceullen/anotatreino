@@ -155,7 +155,6 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "targetMuscles": ["Tríceps"],
     "gifUrl": "https://static.wixstatic.com/media/2edbed_5b4cb9c68de74c0a8955200eec97e059~mv2.gif"
   }
-]
 ];
 
 export const INITIAL_DATA: AppState = {
