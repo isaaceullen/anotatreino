@@ -27,7 +27,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   { "id": "custom_ex_24", "name": "Rosca martelo alternado", "targetMuscles": ["Bíceps", "Antebraço"], "gifUrl": "https://image.tuasaude.com/media/article/kr/cn/rosca-martelo_75628.gif?width=686&height=487" },
   { "id": "custom_ex_25", "name": "Rosca concentrada", "targetMuscles": ["Bíceps"], "gifUrl": "https://static.wixstatic.com/media/2edbed_796d605902f5410db0fc7a4263db4098~mv2.gif" },
   { "id": "custom_ex_26", "name": "Cadeira Extensora", "targetMuscles": ["Perna", "Quadríceps"], "gifUrl": "https://image.tuasaude.com/media/article/ov/fb/cadeira-extensora_75064.gif?width=686&height=487" },
-  { "id": "custom_ex_27", "name": "Mesa Flexora Sentado", "targetMuscles": ["Perna", "Posterior"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/12/cadeira-flexora.gif" },
+  { "id": "custom_ex_27", "name": "Cadeira Flexora", "targetMuscles": ["Perna", "Posterior"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/12/cadeira-flexora.gif" },
   { "id": "custom_ex_28", "name": "Cadeira Abdutora", "targetMuscles": ["Perna", "Glúteo"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/04/pernas-abducao-de-pernas-na-maquina.gif" },
   { "id": "custom_ex_29", "name": "Cadeira Adutora", "targetMuscles": ["Perna"], "gifUrl": "https://i.pinimg.com/originals/4e/17/b8/4e17b88b6b11c54155939c0a5b3c3381.gif" },
   { "id": "custom_ex_31", "name": "Leg press 45", "targetMuscles": ["Perna"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/pernas-leg-press-45-com-joelhos-no-peito.gif" },
