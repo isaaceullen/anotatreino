@@ -165,13 +165,13 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "name": "Mesa Flexora",
     "targetMuscles": ["Perna", "Posterior"],
     "gifUrl": "https://image.tuasaude.com/media/article/hz/mb/mesa-flexora_75623.gif"
-  }
+  },
    {
     "id": "custom_ex_62",
     "name": "Flexão de braço (Push-up)",
     "targetMuscles": ["Peito", "Ombro", "Tríceps"],
     "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/04/flexao-de-bracos.gif"
-  }
+  },
   {
     "id": "custom_ex_63",
     "name": "Crossover polia alta",
