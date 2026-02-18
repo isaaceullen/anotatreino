@@ -30,7 +30,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   { "id": "custom_ex_27", "name": "Mesa Flexora Sentado", "targetMuscles": ["Perna", "Posterior"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/12/cadeira-flexora.gif" },
   { "id": "custom_ex_28", "name": "Cadeira Abdutora", "targetMuscles": ["Perna", "Glúteo"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/04/pernas-abducao-de-pernas-na-maquina.gif" },
   { "id": "custom_ex_29", "name": "Cadeira Adutora", "targetMuscles": ["Perna"], "gifUrl": "https://i.pinimg.com/originals/4e/17/b8/4e17b88b6b11c54155939c0a5b3c3381.gif" },
-  { "id": "custom_ex_31", "name": "Leg press 45", "targetMuscles": ["Perna"], "gifUrl": "https://image.tuasaude.com/media/article/nb/le/leg-press_75589.gif?width=686&height=487" },
+  { "id": "custom_ex_31", "name": "Leg press 45", "targetMuscles": ["Perna"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/pernas-leg-press-45-com-joelhos-no-peito.gif" },
   { "id": "custom_ex_32", "name": "Agachamento (Peso Corporal)", "targetMuscles": ["Perna", "Glúteo"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2023/07/bodyweight-squat.gif" },
   { "id": "custom_ex_33", "name": "Agachamento Livre com Barra", "targetMuscles": ["Perna", "Glúteo"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/11/agachamento-com-barra.gif" },
   { "id": "custom_ex_34", "name": "Levantamento Terra Sumô", "targetMuscles": ["Perna", "Costas", "Glúteo"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2023/03/barbell-sumo-deadlift.gif" },
