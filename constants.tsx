@@ -166,6 +166,90 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "targetMuscles": ["Perna", "Posterior"],
     "gifUrl": "https://image.tuasaude.com/media/article/hz/mb/mesa-flexora_75623.gif"
   }
+   {
+    "id": "custom_ex_62",
+    "name": "Flexão de braço (Push-up)",
+    "targetMuscles": ["Peito", "Ombro", "Tríceps"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/04/flexao-de-bracos.gif"
+  },
+  {
+    "id": "custom_ex_63",
+    "name": "Crossover polia alta",
+    "targetMuscles": ["Peito"],
+    "gifUrl": "https://meutreinador.com/wp-content/uploads/2024/04/Crossover-polia-alta.gif"
+  },
+  {
+    "id": "custom_ex_64",
+    "name": "Remada curvada com barra",
+    "targetMuscles": ["Costas", "Bíceps"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/costas-remada-curvada-com-pegada-invertida.gif"
+  },
+  {
+    "id": "custom_ex_65",
+    "name": "Pulldown na polia alta (Braço estendido)",
+    "targetMuscles": ["Costas"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/09/pulldown-corda.gif"
+  },
+  {
+    "id": "custom_ex_66",
+    "name": "Barra Fixa (Pull-up)",
+    "targetMuscles": ["Costas", "Bíceps"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/costas-barra-fixa-pegada-aberta-palma-para-frente-chinup.gif"
+  },
+  {
+    "id": "custom_ex_67",
+    "name": "Arnold Press",
+    "targetMuscles": ["Ombro", "Tríceps"],
+    "gifUrl": "https://fitnessprogramer.com/wp-content/uploads/2021/02/Arnold-Press.gif"
+  },
+  {
+    "id": "custom_ex_68",
+    "name": "Face Pull",
+    "targetMuscles": ["Ombro", "Trapézio"],
+    "gifUrl": "https://pelank.com/wp-content/uploads/2025/01/Face-Pull.gif"
+  },
+  {
+    "id": "custom_ex_69",
+    "name": "Hack Squat",
+    "targetMuscles": ["Perna", "Quadríceps"],
+    "gifUrl": "https://image.tuasaude.com/media/article/cu/uv/agachamento-hack_75592.gif"
+  },
+  {
+    "id": "custom_ex_70",
+    "name": "Passada / Avanço (Walking Lunges)",
+    "targetMuscles": ["Perna", "Quadríceps", "Glúteo"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2023/07/walking-lunge.gif"
+  },
+  {
+    "id": "custom_ex_71",
+    "name": "Panturrilha no Leg Press",
+    "targetMuscles": ["Perna", "Panturrilha"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2023/03/leg-press-calf-raise.gif"
+  },
+  {
+    "id": "custom_ex_72",
+    "name": "Rosca Inversa com Barra",
+    "targetMuscles": ["Bíceps", "Antebraço"],
+    "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/04/Rosca-Inversa.gif"
+  },
+  {
+    "id": "custom_ex_73",
+    "name": "Tríceps Mergulho (Dips)",
+    "targetMuscles": ["Tríceps", "Peito", "Ombro"],
+    "gifUrl": "https://fitcron.com/wp-content/uploads/2021/03/02511301-Chest-Dip_Chest_720.gif"
+  },
+  {
+    "id": "custom_ex_74",
+    "name": "Roda Abdominal",
+    "targetMuscles": ["Abdominal", "Core"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/03/abdominal-com-rolo-no-chao.gif"
+  },
+  {
+    "id": "custom_ex_75",
+    "name": "Levantamento Terra (Convencional)",
+    "targetMuscles": ["Perna", "Costas", "Glúteo"],
+    "gifUrl": "https://image.tuasaude.com/media/article/zi/bj/levantamento-terra_75590.gif"
+  }
 ];
 
 export const INITIAL_DATA: AppState = {
