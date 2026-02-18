@@ -153,6 +153,12 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "name": "Tríceps coice unilateral",
     "targetMuscles": ["Tríceps"],
     "gifUrl": "https://static.wixstatic.com/media/2edbed_5b4cb9c68de74c0a8955200eec97e059~mv2.gif"
+  },
+  {
+    "id": "custom_ex_60",
+    "name": "Glúteo na Polia",
+    "targetMuscles": ["Glúteo"],
+    "gifUrl": "https://i0.wp.com/meutreinador.com/wp-content/uploads/2023/12/60_Gluteos-no-Cabo-Posicao-Curvada.gif"
   }
 ];
 
