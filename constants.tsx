@@ -4,7 +4,7 @@ import { AppState, MasterExercise } from './types';
 export const CARDIO_MASTER_ID = 'cardio_generic_v1';
 
 export const MASTER_EXERCISES: MasterExercise[] = [
-  { "id": "custom_ex_01", "name": "Supino na máquina", "targetMuscles": ["Peito", "Ombro"], "gifUrl": "https://image.tuasaude.com/media/article/zl/lm/treino-de-superiores_74239.gif?width=242&height=161" },
+  { "id": "custom_ex_01", "name": "Supino na máquina", "targetMuscles": ["Peito", "Ombro"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/04/lever-chest-press-.gif" },
   { "id": "custom_ex_02", "name": "Supino reto com Barra", "targetMuscles": ["Peito", "Tríceps"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2017/09/barbell-bench-press.gif" },
   { "id": "custom_ex_03", "name": "Supino inclinado com halteres", "targetMuscles": ["Peito", "Ombro"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/supino-inclinado-com-halteres.gif" },
   { "id": "custom_ex_04", "name": "Pec Deck (Voador aberto)", "targetMuscles": ["Peito"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/voador-no-aparelho.gif" },
