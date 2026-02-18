@@ -103,7 +103,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_51",
     "name": "Elevação unilateral",
-    "targetMuscles": ["Ombros"],
+    "targetMuscles": ["Ombro"],
     "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Unilateral-na-Polia.gif"
   },
   {
@@ -121,7 +121,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_54",
     "name": "Elevação pélvica",
-    "targetMuscles": ["Glúteos", "Perna"],
+    "targetMuscles": ["Glúteo", "Perna"],
     "gifUrl": "https://i0.wp.com/meutreinador.com/wp-content/uploads/2024/04/elevacao-pelvica-no-banco.gif"
   },
   {
@@ -139,7 +139,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_57",
     "name": "Elevação frontal corda",
-    "targetMuscles": ["Ombros"],
+    "targetMuscles": ["Ombro"],
     "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2018/09/elevacao-frontal-no-cabo.gif"
   },
   {
