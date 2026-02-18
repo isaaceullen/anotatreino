@@ -39,7 +39,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   { "id": "custom_ex_37", "name": "Abdominal supra solo", "targetMuscles": ["Abdominal"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2017/09/abdominal-reto.gif" },
   { "id": "custom_ex_38", "name": "Abdominal infra paralela", "targetMuscles": ["Abdominal"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2017/09/Abdominal-infra-nas-paralelas.gif" },
   { "id": "custom_ex_39", "name": "Abdominal elevação de tronco", "targetMuscles": ["Abdominal"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2017/09/Abdominal-declinado.gif" },
-  { "id": "custom_ex_40", "name": "Abdominal oblíquo calcanhar", "targetMuscles": ["Abdominal"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/09/alongamento-inclinacao-da-pelvis.gif" }
+  { "id": "custom_ex_40", "name": "Abdominal oblíquo calcanhar", "targetMuscles": ["Abdominal"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/09/alongamento-inclinacao-da-pelvis.gif" },
   {
     "id": "custom_ex_41",
     "name": "Prancha",
