@@ -73,7 +73,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_46",
     "name": "Agachamento no smith",
-    "targetMuscles": ["Pernas (Quadríceps)"],
+    "targetMuscles": ["Pernas", "Quadríceps"],
     "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/agachamento-smith-machine-com-foco-nos-gluteos-e-posteriores-da-coxa.gif"
   },
   {
