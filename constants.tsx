@@ -159,6 +159,12 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "name": "Glúteo na Polia",
     "targetMuscles": ["Glúteo"],
     "gifUrl": "https://i0.wp.com/meutreinador.com/wp-content/uploads/2023/12/60_Gluteos-no-Cabo-Posicao-Curvada.gif"
+  },
+  {
+    "id": "custom_ex_61",
+    "name": "Mesa Flexora",
+    "targetMuscles": ["Perna"],
+    "gifUrl": "https://image.tuasaude.com/media/article/hz/mb/mesa-flexora_75623.gif"
   }
 ];
 
