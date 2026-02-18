@@ -73,25 +73,25 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_46",
     "name": "Agachamento no smith",
-    "targetMuscles": ["Pernas", "Quadríceps"],
+    "targetMuscles": ["Perna", "Quadríceps"],
     "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/agachamento-smith-machine-com-foco-nos-gluteos-e-posteriores-da-coxa.gif"
   },
   {
     "id": "custom_ex_47",
     "name": "Afundo no smith",
-    "targetMuscles": ["Pernas"],
+    "targetMuscles": ["Perna"],
     "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/agachamento-afundo-no-smith-machine.gif"
   },
   {
     "id": "custom_ex_48",
     "name": "Stiff",
-    "targetMuscles": ["Pernas"],
+    "targetMuscles": ["Perna"],
     "gifUrl": "https://static.wixstatic.com/media/2edbed_5cd71a451e8f4210b1c1538ea54c03b6~mv2.gif"
   },
   {
     "id": "custom_ex_49",
     "name": "Panturrilha Sentado",
-    "targetMuscles": ["Pernas"],
+    "targetMuscles": ["Perna", "Panturrilha"],
     "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2018/10/lever-seated-calf-raise-.gif"
   },
   {
@@ -121,7 +121,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_54",
     "name": "Elevação pélvica",
-    "targetMuscles": ["Glúteos", "Pernas"],
+    "targetMuscles": ["Glúteos", "Perna"],
     "gifUrl": "https://i0.wp.com/meutreinador.com/wp-content/uploads/2024/04/elevacao-pelvica-no-banco.gif"
   },
   {
