@@ -40,6 +40,122 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   { "id": "custom_ex_38", "name": "Abdominal infra paralela", "targetMuscles": ["Abdominal"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2017/09/Abdominal-infra-nas-paralelas.gif" },
   { "id": "custom_ex_39", "name": "Abdominal elevação de tronco", "targetMuscles": ["Abdominal"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2017/09/Abdominal-declinado.gif" },
   { "id": "custom_ex_40", "name": "Abdominal oblíquo calcanhar", "targetMuscles": ["Abdominal"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/09/alongamento-inclinacao-da-pelvis.gif" }
+  [
+  {
+    "id": "custom_ex_41",
+    "name": "Prancha",
+    "targetMuscles": ["Abdominal", "Core"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/prancha-com-elevacao-das-pernas-prancha-aranha.gif"
+  },
+  {
+    "id": "custom_ex_42",
+    "name": "Remada baixa Supinada",
+    "targetMuscles": ["Costas"],
+    "gifUrl": "https://static.wixstatic.com/media/2edbed_d022143e985c4f02854c12257d16ce91~mv2.gif"
+  },
+  {
+    "id": "custom_ex_43",
+    "name": "Crucifixo Máquina",
+    "targetMuscles": ["Peito"],
+    "gifUrl": "https://newlife.com.cy/wp-content/uploads/2019/11/22551301-Lever-Seated-Fly-female_Chest_360.gif"
+  },
+  {
+    "id": "custom_ex_44",
+    "name": "Rosca Scott máquina",
+    "targetMuscles": ["Bíceps"],
+    "gifUrl": "https://fitnessprogramer.com/wp-content/uploads/2021/04/Lever-Preacher-Curl.gif"
+  },
+  {
+    "id": "custom_ex_45",
+    "name": "Tríceps na polia com corda",
+    "targetMuscles": ["Tríceps"],
+    "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/04/Triceps-na-polia-com-corda.gif?resize=550%2C550&ssl=1"
+  },
+  {
+    "id": "custom_ex_46",
+    "name": "Agachamento no smith",
+    "targetMuscles": ["Pernas (Quadríceps)"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/agachamento-smith-machine-com-foco-nos-gluteos-e-posteriores-da-coxa.gif"
+  },
+  {
+    "id": "custom_ex_47",
+    "name": "Afundo no smith",
+    "targetMuscles": ["Pernas"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/agachamento-afundo-no-smith-machine.gif"
+  },
+  {
+    "id": "custom_ex_48",
+    "name": "Stiff",
+    "targetMuscles": ["Pernas"],
+    "gifUrl": "https://static.wixstatic.com/media/2edbed_5cd71a451e8f4210b1c1538ea54c03b6~mv2.gif"
+  },
+  {
+    "id": "custom_ex_49",
+    "name": "Panturrilha Sentado",
+    "targetMuscles": ["Pernas"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2018/10/lever-seated-calf-raise-.gif"
+  },
+  {
+    "id": "custom_ex_50",
+    "name": "Remada máquina pronada",
+    "targetMuscles": ["Costas"],
+    "gifUrl": "https://image.tuasaude.com/media/article/dm/wv/remada_75622.gif"
+  },
+  {
+    "id": "custom_ex_51",
+    "name": "Elevação unilateral",
+    "targetMuscles": ["Ombros"],
+    "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Unilateral-na-Polia.gif"
+  },
+  {
+    "id": "custom_ex_52",
+    "name": "Triceps testa",
+    "targetMuscles": ["Tríceps"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2025/01/rosca-testa-com-barra2.gif"
+  },
+  {
+    "id": "custom_ex_53",
+    "name": "Rosca direto polia barra",
+    "targetMuscles": ["Bíceps"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/12/rosca-direta-na-polia-com-corda.gif"
+  },
+  {
+    "id": "custom_ex_54",
+    "name": "Elevação pélvica",
+    "targetMuscles": ["Glúteos", "Pernas"],
+    "gifUrl": "https://i0.wp.com/meutreinador.com/wp-content/uploads/2024/04/elevacao-pelvica-no-banco.gif"
+  },
+  {
+    "id": "custom_ex_55",
+    "name": "Abdominal banco",
+    "targetMuscles": ["Abdominal"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/04/abdominal-elevacao-de-pernas-no-banco.gif"
+  },
+  {
+    "id": "custom_ex_56",
+    "name": "Supino inclinado máquina",
+    "targetMuscles": ["Peito"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2023/09/smith-incline-bench-press.gif"
+  },
+  {
+    "id": "custom_ex_57",
+    "name": "Elevação frontal corda",
+    "targetMuscles": ["Ombros"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2018/09/elevacao-frontal-no-cabo.gif"
+  },
+  {
+    "id": "custom_ex_58",
+    "name": "Rosca martelo simultâneo",
+    "targetMuscles": ["Bíceps", "Antebraço"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2023/04/dumbbell-hammer-curl-v-2.gif"
+  },
+  {
+    "id": "custom_ex_59",
+    "name": "Tríceps coice unilateral",
+    "targetMuscles": ["Tríceps"],
+    "gifUrl": "https://static.wixstatic.com/media/2edbed_5b4cb9c68de74c0a8955200eec97e059~mv2.gif"
+  }
+]
 ];
 
 export const INITIAL_DATA: AppState = {
