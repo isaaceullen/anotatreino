@@ -171,7 +171,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "name": "Flexão de braço (Push-up)",
     "targetMuscles": ["Peito", "Ombro", "Tríceps"],
     "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/04/flexao-de-bracos.gif"
-  },
+  }
   {
     "id": "custom_ex_63",
     "name": "Crossover polia alta",
