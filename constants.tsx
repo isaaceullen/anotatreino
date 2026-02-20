@@ -4,9 +4,9 @@ import { AppState, MasterExercise } from './types';
 export const CARDIO_MASTER_ID = 'cardio_generic_v1';
 
 export const MASTER_EXERCISES: MasterExercise[] = [
-  { "id": "custom_ex_01", "name": "Supino na máquina", "targetMuscles": ["Peito", "Ombro", "Tríceps"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/04/lever-chest-press-.gif" },
+  { "id": "custom_ex_01", "name": "Supino reto na máquina", "targetMuscles": ["Peito", "Ombro", "Tríceps"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/04/lever-chest-press-.gif" },
   { "id": "custom_ex_02", "name": "Supino reto com Barra", "targetMuscles": ["Peito", "Ombro", "Tríceps"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2017/09/barbell-bench-press.gif" },
-  { "id": "custom_ex_03", "name": "Supino inclinado com halteres", "targetMuscles": ["Peito", "Ombro", "Tríceps"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/supino-inclinado-com-halteres.gif" },
+  { "id": "custom_ex_03", "name": "Supino inclinado com halteres", "targetMuscles": ["Peito", "Ombro"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/supino-inclinado-com-halteres.gif" },
   { "id": "custom_ex_04", "name": "Pec Deck (Voador aberto)", "targetMuscles": ["Peito"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/voador-no-aparelho.gif" },
   { "id": "custom_ex_05", "name": "Crucifixo reto", "targetMuscles": ["Peito"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2019/11/03081301-crucifixo-com-halteres.gif" },
   { "id": "custom_ex_06", "name": "Desenvolvimento na máquina", "targetMuscles": ["Ombro"], "gifUrl": "https://media.tenor.com/drQHW1DWPo0AAAAM/desenvolvimento-maquina.gif" },
@@ -132,7 +132,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   },
   {
     "id": "custom_ex_56",
-    "name": "Supino inclinado máquina",
+    "name": "Supino inclinado smith",
     "targetMuscles": ["Peito"],
     "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2023/09/smith-incline-bench-press.gif"
   },
@@ -285,6 +285,36 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "name": "Elevação Pélvica com Barra",
     "targetMuscles": ["Glúteos", "Posterior", "Quadríceps"],
     "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Pelvica.gif"
+  },
+  {
+    "id": "custom_ex_81",
+    "name": "Rosca inclinada",
+    "targetMuscles": ["Bíceps"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/rosca-biceps-com-halteres-no-banco-inclinado.gif"
+  },
+  {
+    "id": "custom_ex_82",
+    "name": "Remada Maquina Neutra",
+    "targetMuscles": ["Costas"],
+    "gifUrl": "https://image.tuasaude.com/media/article/dm/wv/remada_75622.gif"
+  },
+  {
+    "id": "custom_ex_83",
+    "name": "Remada em pé Polia Baixa",
+    "targetMuscles": ["Ombro", "Trapézio"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/ombros-remada-alta-no-cabo.gif"
+  },
+  {
+    "id": "custom_ex_84",
+    "name": "Elevação Frontal",
+    "targetMuscles": ["Ombro"],
+    "gifUrl": "https://image.tuasaude.com/media/article/sz/nf/elevacao-frontal_75624.gif"
+  },
+  {
+    "id": "custom_ex_84",
+    "name": "Supino Inclinado Máquina",
+    "targetMuscles": ["Peito", "Ombro"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/07/lever-incline-chest-press.gif"
   }
 ];
 
