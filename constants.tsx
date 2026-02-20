@@ -43,7 +43,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_41",
     "name": "Prancha",
-    "targetMuscles": ["Abdominal", "Core"],
+    "targetMuscles": ["Abdominal"],
     "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/prancha-com-elevacao-das-pernas-prancha-aranha.gif"
   },
   {
@@ -235,7 +235,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_74",
     "name": "Roda Abdominal",
-    "targetMuscles": ["Abdominal", "Core"],
+    "targetMuscles": ["Abdominal"],
     "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/03/abdominal-com-rolo-no-chao.gif"
   },
   {
@@ -253,7 +253,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_77",
     "name": "Abdominal Bike",
-    "targetMuscles": ["Core", "Abdominal", "Quadríceps"],
+    "targetMuscles": ["Abdominal", "Quadríceps"],
     "gifUrl": "https://meutreinador.com/wp-content/uploads/2024/04/abdominal-bicicleta.gif"
   },
   {
@@ -271,7 +271,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_80",
     "name": "Elevação Pélvica com Barra",
-    "targetMuscles": ["Glúteos", "Posterior", "Quadríceps"],
+    "targetMuscles": ["Glúteo", "Posterior", "Quadríceps"],
     "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Pelvica.gif"
   },
   {
