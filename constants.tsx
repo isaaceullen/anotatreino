@@ -68,7 +68,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "id": "custom_ex_45",
     "name": "Tríceps na polia com corda",
     "targetMuscles": ["Tríceps"],
-    "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/04/Triceps-na-polia-com-corda.gif?resize=550%2C550&ssl=1"
+    "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/04/Triceps-na-polia-com-corda.gif"
   },
   {
     "id": "custom_ex_46",
