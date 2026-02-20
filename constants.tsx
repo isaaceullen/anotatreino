@@ -11,11 +11,11 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   { "id": "custom_ex_05", "name": "Crucifixo reto", "targetMuscles": ["Peito"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2019/11/03081301-crucifixo-com-halteres.gif" },
   { "id": "custom_ex_06", "name": "Desenvolvimento na máquina", "targetMuscles": ["Ombro"], "gifUrl": "https://media.tenor.com/drQHW1DWPo0AAAAM/desenvolvimento-maquina.gif" },
   { "id": "custom_ex_07", "name": "Desenvolvimento com halteres Sentado", "targetMuscles": ["Ombro"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/desenvolvimento-para-ombros-com-halteres.gif" },
-  { "id": "custom_ex_08", "name": "Elevação lateral", "targetMuscles": ["Ombro"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Lateral-com-Halteres.gif" },
+  { "id": "custom_ex_08", "name": "Elevação lateral em Pé", "targetMuscles": ["Ombro"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Lateral-com-Halteres.gif" },
   { "id": "custom_ex_09", "name": "Elevação frontal com anilha", "targetMuscles": ["Ombro"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2018/09/elevacao-frontal-com-anilha-v2.gif" },
   { "id": "custom_ex_11", "name": "Tríceps francês unilateral c/ halteres", "targetMuscles": ["Tríceps"], "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/06/triceps-frances-com-halteres-unilateral-1.gif?resize=550%2C550&ssl=1" },
   { "id": "custom_ex_12", "name": "Tríceps pulley", "targetMuscles": ["Tríceps"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Triceps-Pulley-Barra.gif" },
-  { "id": "custom_ex_13", "name": "Tríceps testa Barra W", "targetMuscles": ["Tríceps"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/07/triceps-testa-no-banco-inclinado.gif" },
+  { "id": "custom_ex_13", "name": "Tríceps testa Barra W Inclinado", "targetMuscles": ["Tríceps"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/07/triceps-testa-no-banco-inclinado.gif" },
   { "id": "custom_ex_14", "name": "Puxador frente aberto", "targetMuscles": ["Costas", "Bíceps"], "gifUrl": "https://image.tuasaude.com/media/article/uh/yp/puxada-frontal_75625.gif?width=686&height=487" },
   { "id": "custom_ex_16", "name": "Puxador frente com triângulo", "targetMuscles": ["Costas"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/costas-puxada-para-frente-no-pulley-com-triangulo.gif" },
   { "id": "custom_ex_17", "name": "Remada polia baixa (Triângulo)", "targetMuscles": ["Costas", "Bíceps"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/09/remada-sentado-com-cabos-e-triangulo-para-costas.gif" },
@@ -24,7 +24,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   { "id": "custom_ex_21", "name": "Rosca direta Barra W", "targetMuscles": ["Bíceps"], "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/08/Rosca-direta-com-barra-w.gif?resize=550%2C550&ssl=1" },
   { "id": "custom_ex_22", "name": "Rosca direta Barra reta", "targetMuscles": ["Bíceps"], "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/07/Rosca-Direta-com-Barra.gif?resize=550%2C550&ssl=1" },
   { "id": "custom_ex_23", "name": "Rosca alternada em pé", "targetMuscles": ["Bíceps", "Antebraço"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Rosca-Alternada-com-Halteres.gif" },
-  { "id": "custom_ex_24", "name": "Rosca martelo alternado", "targetMuscles": ["Bíceps", "Antebraço"], "gifUrl": "https://image.tuasaude.com/media/article/kr/cn/rosca-martelo_75628.gif?width=686&height=487" },
+  { "id": "custom_ex_24", "name": "Rosca martelo alternado em pé", "targetMuscles": ["Bíceps", "Antebraço"], "gifUrl": "https://image.tuasaude.com/media/article/kr/cn/rosca-martelo_75628.gif?width=686&height=487" },
   { "id": "custom_ex_25", "name": "Rosca concentrada", "targetMuscles": ["Bíceps"], "gifUrl": "https://static.wixstatic.com/media/2edbed_796d605902f5410db0fc7a4263db4098~mv2.gif" },
   { "id": "custom_ex_26", "name": "Cadeira Extensora", "targetMuscles": ["Perna", "Quadríceps"], "gifUrl": "https://image.tuasaude.com/media/article/ov/fb/cadeira-extensora_75064.gif?width=686&height=487" },
   { "id": "custom_ex_27", "name": "Cadeira Flexora", "targetMuscles": ["Perna", "Posterior"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/12/cadeira-flexora.gif" },
@@ -108,7 +108,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   },
   {
     "id": "custom_ex_52",
-    "name": "Triceps testa",
+    "name": "Triceps Teste Inclinado",
     "targetMuscles": ["Tríceps"],
     "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2025/01/rosca-testa-com-barra2.gif"
   },
@@ -144,7 +144,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   },
   {
     "id": "custom_ex_58",
-    "name": "Rosca martelo simultâneo",
+    "name": "Rosca martelo simultâneo em pé",
     "targetMuscles": ["Bíceps", "Antebraço"],
     "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2023/04/dumbbell-hammer-curl-v-2.gif"
   },
@@ -249,6 +249,42 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "name": "Levantamento Terra (Convencional)",
     "targetMuscles": ["Perna", "Costas", "Glúteo"],
     "gifUrl": "https://image.tuasaude.com/media/article/zi/bj/levantamento-terra_75590.gif"
+  },
+   {
+    "id": "custom_ex_76",
+    "name": "Tríceps Polia barra V",
+    "targetMuscles": ["Tríceps"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2025/01/triceps-na-polia-com-barra-reta.gif"
+  },
+  {
+    "id": "custom_ex_77",
+    "name": "Abdominal Bike",
+    "targetMuscles": ["Core", "Abdominal", "Quadríceps"],
+    "gifUrl": "https://meutreinador.com/wp-content/uploads/2024/04/abdominal-bicicleta.gif"
+  },
+  {
+    "id": "custom_ex_78",
+    "name": "Supino Reto com Halteres",
+    "targetMuscles": ["Peito", "Ombro", "Tríceps"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/supino-reto-com-halteres.gif"
+  },
+  {
+    "id": "custom_ex_79",
+    "name": "Rosca alternada sentado",
+    "targetMuscles": ["Bíceps", "Antebraço"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/08/dumbbell-alternate-seated-hammer-curl.gif"
+  },
+  {
+    "id": "custom_ex_80",
+    "name": "Elevação Pélvica com Barra",
+    "targetMuscles": ["Glúteos", "Posterior", "Quadríceps"],
+    "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Pelvica.gif"
+  },
+  {
+    "id": "custom_ex_80",
+    "name": "Elevação Pélvica com Barra",
+    "targetMuscles": ["Glúteos", "Posterior", "Quadríceps"],
+    "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Pelvica.gif"
   }
 ];
 
