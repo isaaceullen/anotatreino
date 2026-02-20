@@ -95,12 +95,6 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2018/10/lever-seated-calf-raise-.gif"
   },
   {
-    "id": "custom_ex_50",
-    "name": "Remada máquina pronada",
-    "targetMuscles": ["Costas", "Bíceps"],
-    "gifUrl": "https://image.tuasaude.com/media/article/dm/wv/remada_75622.gif"
-  },
-  {
     "id": "custom_ex_51",
     "name": "Elevação unilateral",
     "targetMuscles": ["Ombro"],
@@ -108,7 +102,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   },
   {
     "id": "custom_ex_52",
-    "name": "Triceps Teste Inclinado",
+    "name": "Triceps Testa Deitado",
     "targetMuscles": ["Tríceps"],
     "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2025/01/rosca-testa-com-barra2.gif"
   },
@@ -281,12 +275,6 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Pelvica.gif"
   },
   {
-    "id": "custom_ex_80",
-    "name": "Elevação Pélvica com Barra",
-    "targetMuscles": ["Glúteos", "Posterior", "Quadríceps"],
-    "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Pelvica.gif"
-  },
-  {
     "id": "custom_ex_81",
     "name": "Rosca inclinada",
     "targetMuscles": ["Bíceps"],
@@ -311,7 +299,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "gifUrl": "https://image.tuasaude.com/media/article/sz/nf/elevacao-frontal_75624.gif"
   },
   {
-    "id": "custom_ex_84",
+    "id": "custom_ex_85",
     "name": "Supino Inclinado Máquina",
     "targetMuscles": ["Peito", "Ombro"],
     "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/07/lever-incline-chest-press.gif"
