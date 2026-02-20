@@ -303,6 +303,12 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "name": "Supino Inclinado Máquina",
     "targetMuscles": ["Peito", "Ombro"],
     "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/07/lever-incline-chest-press.gif"
+  },
+  {
+    "id": "custom_ex_86",
+    "name": "Puxada Frente máquina supinada",
+    "targetMuscles": ["Costas"],
+    "gifUrl": "https://musclemagfitness.com/wp-content/uploads/reverse-grip-lat-pulldown-exercise.gif"
   }
 ];
 
