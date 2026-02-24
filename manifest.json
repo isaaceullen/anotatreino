@@ -1,11 +1,27 @@
 
 {
+  "id": "com.anotatreino.app",
   "short_name": "AnotaTreino",
   "name": "Anota Treino",
-  "start_url": ".",
+  "description": "Gestão personalizada de treinos com foco em progressão e constância.",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#000000",
   "orientation": "portrait",
-  "scope": "/"
+  "scope": "/",
+  "icons": [
+    {
+      "src": "https://picsum.photos/192/192",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://picsum.photos/512/512",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
