@@ -10,12 +10,11 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "date-fns": "^4.1.0",
-    "lucide-react": "^0.562.0",
-    "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "react-router-dom": "^7.13.1",
-    "recharts": "^3.6.0"
+    "react": "^19.2.3",
+    "lucide-react": "^0.562.0",
+    "recharts": "^3.6.0",
+    "date-fns": "^4.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
