@@ -4,6 +4,14 @@ import { Search, Plus, Trash2, Save, Minus, Activity, Dumbbell, Check, ChevronRi
 import { Exercise, MasterExercise, GROUPS, GroupLetter } from '../types';
 import { MASTER_EXERCISES, CARDIO_MASTER_ID } from '../constants';
 
+// Helper function to normalize text (remove accents and lowercase)
+const normalizeText = (text: string) => {
+  return text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+};
+
 // Componente Stepper Otimizado para Mobile UX
 const Stepper = ({ value, onChange, step, label }: { value: number | string, onChange: (v: number | string) => void, step: number, label: string }) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,12 +71,21 @@ export const ExercisesScreen: React.FC<{ manager: any }> = ({ manager }) => {
     return Array.from(new Set(allMuscles)).sort();
   }, []);
   
-  // Filtro atualizado para arrays
+  // Filtro atualizado para arrays e busca inteligente
   const filteredCatalog = useMemo(() => {
-    return MASTER_EXERCISES.filter(m => 
-      m.name.toLowerCase().includes(search.toLowerCase()) &&
-      (!selectedMuscle || m.targetMuscles.includes(selectedMuscle))
-    );
+    const normalizedSearch = normalizeText(search);
+    const searchTerms = normalizedSearch.split(' ').filter(term => term.length > 0);
+
+    return MASTER_EXERCISES.filter(m => {
+      const normalizedName = normalizeText(m.name);
+      
+      // Verifica se TODAS as palavras da busca estão presentes no nome
+      const matchesSearch = searchTerms.every(term => normalizedName.includes(term));
+      
+      const matchesMuscle = !selectedMuscle || m.targetMuscles.includes(selectedMuscle);
+
+      return matchesSearch && matchesMuscle;
+    });
   }, [search, selectedMuscle]);
 
   // Lógica de Toggle (Batch Selection)
