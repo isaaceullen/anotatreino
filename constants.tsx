@@ -309,6 +309,18 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "name": "Puxada Frente máquina supinada",
     "targetMuscles": ["Costas"],
     "gifUrl": "https://musclemagfitness.com/wp-content/uploads/reverse-grip-lat-pulldown-exercise.gif"
+  },
+  {
+    "id": "custom_ex_87",
+    "name": "Agachamento Hack Machine",
+    "targetMuscles": ["Coxa", "Glúteo", "Posterior"],
+    "gifUrl": "https://treinomestre.com.br/wp-content/uploads/2023/11/agachamento-hck-invertido-Reverse-Hack-Squat-.gif"
+  },
+  {
+    "id": "custom_ex_88",
+    "name": "Flexora em Pé",
+    "targetMuscles": ["Coxa", "Glúteo", "Posterior"],
+    "gifUrl": "https://fitnessprogramer.com/wp-content/uploads/2021/09/Lever-Kneeling-Leg-Curl-.gif"
   }
 ];
 
