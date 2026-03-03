@@ -1,5 +1,5 @@
 
-import React, { useState, Suspense } from 'react';
+import React, { useState, Suspense, useEffect } from 'react';
 import { Home, Dumbbell, Calendar, Settings as SettingsIcon } from 'lucide-react';
 import { useWorkoutManager } from './hooks/useWorkoutManager';
 import { HomeScreen } from './screens/HomeScreen';
@@ -21,6 +21,36 @@ const App: React.FC = () => {
   const workoutManager = useWorkoutManager();
   const [activeTab, setActiveTab] = useState<Screen>('home');
 
+  // Implementação de Roteamento via Hash (#)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#/', '');
+      const validScreens: Screen[] = ['home', 'exercises', 'history', 'settings'];
+      
+      if (validScreens.includes(hash as Screen)) {
+        setActiveTab(hash as Screen);
+      } else {
+        // Rota padrão
+        window.location.hash = '#/home';
+        setActiveTab('home');
+      }
+    };
+
+    // Configurar hash inicial se vazio
+    if (!window.location.hash) {
+      window.location.hash = '#/home';
+    } else {
+      handleHashChange();
+    }
+
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  const navigateTo = (screen: Screen) => {
+    window.location.hash = `#/${screen}`;
+  };
+
   if (workoutManager.activeDraft) {
     return (
       <>
@@ -31,16 +61,22 @@ const App: React.FC = () => {
   }
 
   const renderContent = () => {
+    // Renderização Condicional Estrita:
+    // O componente ExercisesScreen só é montado se activeTab === 'exercises'.
+    // Ao mudar de aba, ele é desmontado, interrompendo o carregamento de GIFs.
+    if (activeTab === 'exercises') {
+      return (
+        <Suspense fallback={<LoadingSpinner />}>
+          <ExercisesScreen manager={workoutManager} />
+        </Suspense>
+      );
+    }
+
     switch (activeTab) {
       case 'home': return <HomeScreen manager={workoutManager} />;
-      case 'exercises': 
-        return (
-          <Suspense fallback={<LoadingSpinner />}>
-            <ExercisesScreen manager={workoutManager} />
-          </Suspense>
-        );
       case 'history': return <HistoryScreen manager={workoutManager} />;
       case 'settings': return <ConfigScreen manager={workoutManager} />;
+      default: return <HomeScreen manager={workoutManager} />;
     }
   };
 
@@ -54,25 +90,25 @@ const App: React.FC = () => {
         <div className="flex justify-around items-center h-20 px-4">
           <NavButton 
             active={activeTab === 'home'} 
-            onClick={() => setActiveTab('home')} 
+            onClick={() => navigateTo('home')} 
             icon={<Home size={22} />} 
             label="Início" 
           />
           <NavButton 
             active={activeTab === 'exercises'} 
-            onClick={() => setActiveTab('exercises')} 
+            onClick={() => navigateTo('exercises')} 
             icon={<Dumbbell size={22} />} 
             label="Acervo" 
           />
           <NavButton 
             active={activeTab === 'history'} 
-            onClick={() => setActiveTab('history')} 
+            onClick={() => navigateTo('history')} 
             icon={<Calendar size={22} />} 
             label="Evolução" 
           />
           <NavButton 
             active={activeTab === 'settings'} 
-            onClick={() => setActiveTab('settings')} 
+            onClick={() => navigateTo('settings')} 
             icon={<SettingsIcon size={22} />} 
             label="Ajustes" 
           />

@@ -44,8 +44,8 @@ export const ProgressScreen: React.FC<{ app: any }> = ({ app }) => {
       <section className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 mb-8">
         <h3 className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] mb-6 text-center">Calendário de Consistência</h3>
         <div className="grid grid-cols-7 gap-y-4 text-center">
-          {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map(d => (
-            <span key={d} className="text-[10px] font-black text-zinc-700">{d}</span>
+          {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((d, i) => (
+            <span key={`${d}-${i}`} className="text-[10px] font-black text-zinc-700">{d}</span>
           ))}
           {Array.from({ length: firstDay }).map((_, i) => <div key={`empty-${i}`} />)}
           {Array.from({ length: daysInMonth }).map((_, i) => {

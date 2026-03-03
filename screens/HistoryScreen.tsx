@@ -159,8 +159,8 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
           </h3>
           
           <div className="grid grid-cols-7 gap-2">
-            {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map(d => (
-              <div key={d} className="text-center text-[10px] font-black text-zinc-600 pb-2">{d}</div>
+            {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((d, i) => (
+              <div key={`${d}-${i}`} className="text-center text-[10px] font-black text-zinc-600 pb-2">{d}</div>
             ))}
             {monthDays.map((day, i) => {
               const daySessions = getSessionsForDay(day);
