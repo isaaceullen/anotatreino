@@ -294,7 +294,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   },
   {
     "id": "custom_ex_84",
-    "name": "Elevação Frontal",
+    "name": "Elevação Frontal com Halteres",
     "targetMuscles": ["Ombro"],
     "gifUrl": "https://image.tuasaude.com/media/article/sz/nf/elevacao-frontal_75624.gif"
   },
