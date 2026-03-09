@@ -11,7 +11,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   { "id": "custom_ex_05", "name": "Crucifixo reto", "targetMuscles": ["Peito"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2019/11/03081301-crucifixo-com-halteres.gif" },
   { "id": "custom_ex_06", "name": "Desenvolvimento na máquina", "targetMuscles": ["Ombro"], "gifUrl": "https://media.tenor.com/drQHW1DWPo0AAAAM/desenvolvimento-maquina.gif" },
   { "id": "custom_ex_07", "name": "Desenvolvimento com halteres Sentado", "targetMuscles": ["Ombro"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/desenvolvimento-para-ombros-com-halteres.gif" },
-  { "id": "custom_ex_08", "name": "Elevação lateral em Pé", "targetMuscles": ["Ombro"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Lateral-com-Halteres.gif" },
+  { "id": "custom_ex_08", "name": "Elevação lateral em Pé com Halteres", "targetMuscles": ["Ombro"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Lateral-com-Halteres.gif" },
   { "id": "custom_ex_09", "name": "Elevação frontal com anilha", "targetMuscles": ["Ombro"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2018/09/elevacao-frontal-com-anilha-v2.gif" },
   { "id": "custom_ex_11", "name": "Tríceps francês unilateral c/ halteres", "targetMuscles": ["Tríceps"], "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/06/triceps-frances-com-halteres-unilateral-1.gif?resize=550%2C550&ssl=1" },
   { "id": "custom_ex_12", "name": "Tríceps pulley com Barra", "targetMuscles": ["Tríceps"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Triceps-Pulley-Barra.gif" },
@@ -96,7 +96,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   },
   {
     "id": "custom_ex_51",
-    "name": "Elevação unilateral",
+    "name": "Elevação unilateral na Polia",
     "targetMuscles": ["Ombro"],
     "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Unilateral-na-Polia.gif"
   },
