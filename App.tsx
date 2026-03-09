@@ -24,11 +24,12 @@ const App: React.FC = () => {
   // Implementação de Roteamento via Hash (#)
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.replace('#/', '');
+      const fullHash = window.location.hash.replace('#/', '');
+      const screenName = fullHash.split('?')[0];
       const validScreens: Screen[] = ['home', 'exercises', 'history', 'settings'];
       
-      if (validScreens.includes(hash as Screen)) {
-        setActiveTab(hash as Screen);
+      if (validScreens.includes(screenName as Screen)) {
+        setActiveTab(screenName as Screen);
       } else {
         // Rota padrão
         window.location.hash = '#/home';

@@ -88,10 +88,23 @@ export const ConfigScreen: React.FC<{ manager: any }> = ({ manager }) => {
         <div className="p-6 pb-32 animate-in slide-in-from-right duration-300 h-full overflow-y-auto">
            <header className="flex items-center gap-4 mb-8">
               <button onClick={() => setEditingGroup(null)} className="p-2 bg-zinc-900 rounded-xl text-zinc-400"><ChevronLeft size={20}/></button>
-              <div>
+              <div className="flex-1">
                  <h2 className="text-2xl font-black italic uppercase tracking-tighter leading-none">Grupo {editingGroup}</h2>
                  <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Editando {exercises.length} Exercícios</p>
               </div>
+              <button 
+                onClick={async () => {
+                   if (await showDialog('confirm', 'Apagar Tudo?', `Deseja apagar todos os exercícios do Grupo ${editingGroup}?`)) {
+                      const exercisesToRemove = state.exercises.filter((e: any) => e.groupId === editingGroup);
+                      exercisesToRemove.forEach((e: any) => removeExercise(e.id));
+                      setEditingGroup(null);
+                   }
+                }}
+                className="p-2 bg-red-500/10 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-colors"
+                title="Apagar todos os exercícios deste grupo"
+              >
+                <Trash2 size={20} />
+              </button>
            </header>
            
            <div className="space-y-4">
@@ -141,7 +154,15 @@ export const ConfigScreen: React.FC<{ manager: any }> = ({ manager }) => {
               )}
            </div>
 
-           <div className="pt-4 mt-4 border-t border-dashed border-zinc-800">
+           <div className="pt-4 mt-4 border-t border-dashed border-zinc-800 space-y-3">
+             <button 
+               onClick={() => {
+                 window.location.hash = `#/exercises?group=${editingGroup}`;
+               }}
+               className="w-full py-4 rounded-2xl bg-blue-600 text-white font-black uppercase text-xs tracking-widest flex items-center justify-center gap-2 hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20"
+             >
+                <Plus size={16} /> Adicionar Exercício
+             </button>
              <button 
                onClick={handleAddCardio}
                disabled={hasCardio}
@@ -183,8 +204,25 @@ export const ConfigScreen: React.FC<{ manager: any }> = ({ manager }) => {
                                <p className="text-xs font-bold text-zinc-400 uppercase tracking-widest">{count} Exercícios</p>
                             </div>
                          </div>
-                         <div className="text-xs font-bold text-blue-500 uppercase tracking-widest flex items-center gap-1">
-                           Editar <Edit size={12} />
+                         <div className="flex items-center gap-3">
+                           {isActive && (
+                             <button 
+                               onClick={async (e) => {
+                                 e.stopPropagation();
+                                 if (await showDialog('confirm', 'Apagar Tudo?', `Deseja apagar todos os exercícios do Grupo ${g}?`)) {
+                                    const exercisesToRemove = state.exercises.filter((ex: any) => ex.groupId === g);
+                                    exercisesToRemove.forEach((ex: any) => removeExercise(ex.id));
+                                 }
+                               }}
+                               className="p-2 text-zinc-600 hover:text-red-500 transition-colors"
+                               title="Apagar todos os exercícios"
+                             >
+                               <Trash2 size={16} />
+                             </button>
+                           )}
+                           <div className="text-xs font-bold text-blue-500 uppercase tracking-widest flex items-center gap-1">
+                             Editar <Edit size={12} />
+                           </div>
                          </div>
                       </div>
                       

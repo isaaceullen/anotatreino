@@ -8,7 +8,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   { "id": "custom_ex_02", "name": "Supino reto com Barra", "targetMuscles": ["Peito", "Ombro", "Tríceps"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2017/09/barbell-bench-press.gif" },
   { "id": "custom_ex_03", "name": "Supino inclinado com halteres", "targetMuscles": ["Peito", "Ombro"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/supino-inclinado-com-halteres.gif" },
   { "id": "custom_ex_04", "name": "Pec Deck (Voador aberto)", "targetMuscles": ["Peito"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/voador-no-aparelho.gif" },
-  { "id": "custom_ex_05", "name": "Crucifixo reto", "targetMuscles": ["Peito"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2019/11/03081301-crucifixo-com-halteres.gif" },
+  { "id": "custom_ex_05", "name": "Crucifixo reto deitado com halteres", "targetMuscles": ["Peito"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2019/11/03081301-crucifixo-com-halteres.gif" },
   { "id": "custom_ex_06", "name": "Desenvolvimento na máquina", "targetMuscles": ["Ombro"], "gifUrl": "https://media.tenor.com/drQHW1DWPo0AAAAM/desenvolvimento-maquina.gif" },
   { "id": "custom_ex_07", "name": "Desenvolvimento com halteres Sentado", "targetMuscles": ["Ombro"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/desenvolvimento-para-ombros-com-halteres.gif" },
   { "id": "custom_ex_08", "name": "Elevação lateral em Pé com Halteres", "targetMuscles": ["Ombro"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Lateral-com-Halteres.gif" },

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { GROUPS, GroupLetter, DAY_NAMES } from '../types';
-import { Play, Dumbbell, CalendarDays } from 'lucide-react';
+import { Play, Dumbbell, CalendarDays, Trash2 } from 'lucide-react';
 
 export const HomeScreen: React.FC<{ manager: any }> = ({ manager }) => {
   const { state, startWorkout, getGroupTags } = manager;
@@ -89,7 +89,22 @@ export const HomeScreen: React.FC<{ manager: any }> = ({ manager }) => {
                           )}
                        </div>
                     </div>
-                    {isSelected && <div className="w-3 h-3 bg-white rounded-full animate-pulse shadow-lg" />}
+                    <div className="flex items-center gap-3">
+                      <button 
+                         onClick={async (e) => {
+                           e.stopPropagation();
+                           if (await manager.showDialog('confirm', 'Apagar Tudo?', `Deseja apagar todos os exercícios do Grupo ${g}?`)) {
+                              const exercisesToRemove = state.exercises.filter((ex: any) => ex.groupId === g);
+                              exercisesToRemove.forEach((ex: any) => manager.removeExercise(ex.id));
+                           }
+                         }}
+                         className={`p-2 rounded-full transition-colors ${isSelected ? 'text-blue-200 hover:text-white hover:bg-blue-500' : 'text-zinc-600 hover:text-red-500 hover:bg-zinc-800'}`}
+                         title="Apagar todos os exercícios"
+                      >
+                         <Trash2 size={18} />
+                      </button>
+                      {isSelected && <div className="w-3 h-3 bg-white rounded-full animate-pulse shadow-lg" />}
+                    </div>
                   </div>
 
                   <div className="flex flex-wrap gap-1 relative z-10">

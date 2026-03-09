@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { Search, Plus, Trash2, Save, Minus, Activity, Dumbbell, Check, ChevronRight, ArrowLeft, Lock } from 'lucide-react';
+import { Search, Plus, Trash2, Save, Minus, Activity, Dumbbell, Check, ChevronRight, ArrowLeft, Lock, XCircle } from 'lucide-react';
 import { Exercise, MasterExercise, GROUPS, GroupLetter } from '../types';
 import { MASTER_EXERCISES, CARDIO_MASTER_ID } from '../constants';
 
@@ -60,10 +60,15 @@ export const ExercisesScreen: React.FC<{ manager: any }> = ({ manager }) => {
   const [activeStep, setActiveStep] = useState<'catalog' | 'config'>('catalog');
   const [search, setSearch] = useState('');
   const [selectedMuscle, setSelectedMuscle] = useState<string | null>(null);
+  const [showOnlyAdded, setShowOnlyAdded] = useState(false);
   
   // Lista de exercícios selecionados para o lote
   const [selection, setSelection] = useState<any[]>([]);
-  const [targetGroup, setTargetGroup] = useState<GroupLetter>('A');
+  const [targetGroup, setTargetGroup] = useState<GroupLetter>(() => {
+    const hash = window.location.hash;
+    const match = hash.match(/group=([A-Z])/);
+    return (match ? match[1] : 'A') as GroupLetter;
+  });
 
   // Músculos únicos (agregado de arrays)
   const muscles = useMemo(() => {
@@ -84,9 +89,12 @@ export const ExercisesScreen: React.FC<{ manager: any }> = ({ manager }) => {
       
       const matchesMuscle = !selectedMuscle || m.targetMuscles.includes(selectedMuscle);
 
-      return matchesSearch && matchesMuscle;
+      const isAlreadyInGroup = state.exercises.some((e: any) => e.groupId === targetGroup && e.masterId === m.id);
+      const matchesAddedFilter = !showOnlyAdded || isAlreadyInGroup;
+
+      return matchesSearch && matchesMuscle && matchesAddedFilter;
     });
-  }, [search, selectedMuscle]);
+  }, [search, selectedMuscle, showOnlyAdded, targetGroup, state.exercises]);
 
   // Lógica de Toggle (Batch Selection)
   const toggleSelection = (master: MasterExercise) => {
@@ -263,11 +271,19 @@ className="bg-zinc-900 border border-zinc-800 text-blue-500 font-black rounded-l
 </select>
 </div>
 </div>
+<div className="flex flex-col items-end gap-2">
 {selection.length > 0 && (
 <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest animate-pulse">
 {selection.length} Selecionados
 </div>
 )}
+<button
+  onClick={() => setShowOnlyAdded(!showOnlyAdded)}
+  className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors border ${showOnlyAdded ? 'bg-blue-600 text-white border-blue-500' : 'bg-zinc-900 text-zinc-500 border-zinc-800 hover:text-white'}`}
+>
+  {showOnlyAdded ? 'Ver Todos' : 'Meus Exercícios'}
+</button>
+</div>
 
 </header>
 
@@ -280,8 +296,16 @@ className="bg-zinc-900 border border-zinc-800 text-blue-500 font-black rounded-l
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Buscar exercício..."
-              className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl py-4 pl-12 pr-4 text-white outline-none focus:ring-2 ring-blue-500 transition-all"
+              className="w-full bg-zinc-900 border border-zinc-800 rounded-2xl py-4 pl-12 pr-12 text-white outline-none focus:ring-2 ring-blue-500 transition-all"
             />
+            {search && (
+              <button 
+                onClick={() => setSearch('')}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-white transition-colors"
+              >
+                <XCircle size={18} />
+              </button>
+            )}
          </div>
          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
             <button 
