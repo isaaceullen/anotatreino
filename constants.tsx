@@ -14,13 +14,13 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   { "id": "custom_ex_08", "name": "Elevação lateral em Pé", "targetMuscles": ["Ombro"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Lateral-com-Halteres.gif" },
   { "id": "custom_ex_09", "name": "Elevação frontal com anilha", "targetMuscles": ["Ombro"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2018/09/elevacao-frontal-com-anilha-v2.gif" },
   { "id": "custom_ex_11", "name": "Tríceps francês unilateral c/ halteres", "targetMuscles": ["Tríceps"], "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/06/triceps-frances-com-halteres-unilateral-1.gif?resize=550%2C550&ssl=1" },
-  { "id": "custom_ex_12", "name": "Tríceps pulley", "targetMuscles": ["Tríceps"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Triceps-Pulley-Barra.gif" },
+  { "id": "custom_ex_12", "name": "Tríceps pulley com Barra", "targetMuscles": ["Tríceps"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Triceps-Pulley-Barra.gif" },
   { "id": "custom_ex_13", "name": "Tríceps testa Barra W Inclinado", "targetMuscles": ["Tríceps"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/07/triceps-testa-no-banco-inclinado.gif" },
   { "id": "custom_ex_14", "name": "Puxador frente aberto", "targetMuscles": ["Costas", "Bíceps"], "gifUrl": "https://image.tuasaude.com/media/article/uh/yp/puxada-frontal_75625.gif?width=686&height=487" },
   { "id": "custom_ex_16", "name": "Puxador frente com triângulo", "targetMuscles": ["Costas"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/costas-puxada-para-frente-no-pulley-com-triangulo.gif" },
   { "id": "custom_ex_17", "name": "Remada polia baixa (Triângulo)", "targetMuscles": ["Costas", "Bíceps"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/09/remada-sentado-com-cabos-e-triangulo-para-costas.gif" },
   { "id": "custom_ex_18", "name": "Remada Cavalinho", "targetMuscles": ["Costas", "Bíceps"], "gifUrl": "https://treinototal.com.br/wp-content/uploads/2025/06/remada-cavalinho.gif" },
-  { "id": "custom_ex_19", "name": "Encolhimento com halteres", "targetMuscles": ["Trapézio", "Ombro"], "gifUrl": "https://treinomestre.com.br/wp-content/uploads/2016/01/encolhimento-de-ombros-com-halter.gif" },
+  { "id": "custom_ex_19", "name": "Encolhimento de Ombros com halteres", "targetMuscles": ["Trapézio", "Ombro"], "gifUrl": "https://treinomestre.com.br/wp-content/uploads/2016/01/encolhimento-de-ombros-com-halter.gif" },
   { "id": "custom_ex_21", "name": "Rosca direta Barra W", "targetMuscles": ["Bíceps"], "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/08/Rosca-direta-com-barra-w.gif?resize=550%2C550&ssl=1" },
   { "id": "custom_ex_22", "name": "Rosca direta Barra reta", "targetMuscles": ["Bíceps"], "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/07/Rosca-Direta-com-Barra.gif?resize=550%2C550&ssl=1" },
   { "id": "custom_ex_23", "name": "Rosca alternada em pé", "targetMuscles": ["Bíceps", "Antebraço"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Rosca-Alternada-com-Halteres.gif" },
@@ -72,7 +72,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   },
   {
     "id": "custom_ex_46",
-    "name": "Agachamento no smith",
+    "name": "Agachamento guiado no smith",
     "targetMuscles": ["Perna", "Quadríceps", "Glúteo"],
     "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/agachamento-smith-machine-com-foco-nos-gluteos-e-posteriores-da-coxa.gif"
   },
@@ -108,7 +108,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   },
   {
     "id": "custom_ex_53",
-    "name": "Rosca direto polia barra",
+    "name": "Rosca direto polia corda",
     "targetMuscles": ["Bíceps"],
     "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/12/rosca-direta-na-polia-com-corda.gif"
   },
@@ -144,7 +144,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   },
   {
     "id": "custom_ex_59",
-    "name": "Tríceps coice unilateral",
+    "name": "Tríceps coice unilateral com Halteres",
     "targetMuscles": ["Tríceps"],
     "gifUrl": "https://static.wixstatic.com/media/2edbed_5b4cb9c68de74c0a8955200eec97e059~mv2.gif"
   },
@@ -321,7 +321,50 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "name": "Flexora em Pé",
     "targetMuscles": ["Coxa", "Glúteo", "Posterior"],
     "gifUrl": "https://fitnessprogramer.com/wp-content/uploads/2021/09/Lever-Kneeling-Leg-Curl-.gif"
+  },
+  {
+    "id": "custom_ex_89",
+    "name": "Tríceps testa com halteres",
+    "targetMuscles": ["Tríceps"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/03/extensao-de-triceps-com-halteres-no-banco.gif"
+  },
+  {
+    "id": "custom_ex_90",
+    "name": "Tríceps pulley com Corda",
+    "targetMuscles": ["Tríceps"],
+    "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/04/Triceps-pulley-corda-1.gif"
+  },
+  {
+    "id": "custom_ex_91",
+    "name": "Puxador Frente com Barra Romana",
+    "targetMuscles": ["Costas", "Bíceps"],
+    "gifUrl": "https://www.strongermobileapp.com/gifs/neutral_grip_pulldown.gif"
+  },
+  {
+    "id": "custom_ex_92",
+    "name": "Remada unilateral com halteres",
+    "targetMuscles": ["Tríceps"],
+    "gifUrl": "https://fitliferegime.com/wp-content/uploads/2023/05/One-Arm-Dumbbell-Row.gif"
+  },
+  {
+    "id": "custom_ex_93",
+    "name": "Rosca direto polia barra",
+    "targetMuscles": ["Bíceps"],
+    "gifUrl": "https://cdn.shopify.com/s/files/1/0618/9462/3460/files/cable-drag-curl.gif"
+  },
+  {
+    "id": "custom_ex_94",
+    "name": "Rosca simultânea sentado",
+    "targetMuscles": ["Bíceps", "Antebraço"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2019/05/rosca-simultanea-com-halteres-sentada_v2.gif"
+  },
+  {
+    "id": "custom_ex_95",
+    "name": "Abdominal Remador",
+    "targetMuscles": ["Abdominal"],
+    "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2017/09/abdominal-remador.gif"
   }
+  
 ];
 
 
