@@ -65,9 +65,9 @@ export const ExercisesScreen: React.FC<{ manager: any }> = ({ manager }) => {
   // Lista de exercícios selecionados para o lote
   const [selection, setSelection] = useState<any[]>([]);
   const [targetGroup, setTargetGroup] = useState<GroupLetter>(() => {
-    const hash = window.location.hash;
-    const match = hash.match(/group=([A-Z])/);
-    return (match ? match[1] : 'A') as GroupLetter;
+    const searchParams = new URLSearchParams(window.location.search);
+    const group = searchParams.get('group');
+    return (group as GroupLetter) || 'A';
   });
 
   // Músculos únicos (agregado de arrays)

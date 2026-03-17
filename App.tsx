@@ -21,35 +21,38 @@ const App: React.FC = () => {
   const workoutManager = useWorkoutManager();
   const [activeTab, setActiveTab] = useState<Screen>('home');
 
-  // Implementação de Roteamento via Hash (#)
+  // Implementação de Roteamento via Pathname (/)
   useEffect(() => {
-    const handleHashChange = () => {
-      const fullHash = window.location.hash.replace('#/', '');
-      const screenName = fullHash.split('?')[0];
+    const handleLocationChange = () => {
+      const path = window.location.pathname.replace(/^\//, '');
+      const screenName = path || 'home';
       const validScreens: Screen[] = ['home', 'exercises', 'history', 'settings'];
       
       if (validScreens.includes(screenName as Screen)) {
         setActiveTab(screenName as Screen);
       } else {
         // Rota padrão
-        window.location.hash = '#/home';
+        window.history.replaceState(null, '', '/home');
         setActiveTab('home');
       }
     };
 
-    // Configurar hash inicial se vazio
-    if (!window.location.hash) {
-      window.location.hash = '#/home';
-    } else {
-      handleHashChange();
-    }
+    handleLocationChange();
 
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('pushstate', handleLocationChange);
+    window.addEventListener('replacestate', handleLocationChange);
+
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('pushstate', handleLocationChange);
+      window.removeEventListener('replacestate', handleLocationChange);
+    };
   }, []);
 
   const navigateTo = (screen: Screen) => {
-    window.location.hash = `#/${screen}`;
+    window.history.pushState(null, '', `/${screen}`);
+    window.dispatchEvent(new Event('pushstate'));
   };
 
   if (workoutManager.activeDraft) {

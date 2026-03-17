@@ -157,7 +157,8 @@ export const ConfigScreen: React.FC<{ manager: any }> = ({ manager }) => {
            <div className="pt-4 mt-4 border-t border-dashed border-zinc-800 space-y-3">
              <button 
                onClick={() => {
-                 window.location.hash = `#/exercises?group=${editingGroup}`;
+                 window.history.pushState(null, '', `/exercises?group=${editingGroup}`);
+                 window.dispatchEvent(new Event('pushstate'));
                }}
                className="w-full py-4 rounded-2xl bg-blue-600 text-white font-black uppercase text-xs tracking-widest flex items-center justify-center gap-2 hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20"
              >
