@@ -92,19 +92,8 @@ export const useWorkoutManager = () => {
   };
 
   const getLastSessionData = (exerciseId: string) => {
-    const lastSession = [...state.sessions]
-      .reverse()
-      .find(s => s.details.some(d => d.exerciseId === exerciseId));
-    
-    if (lastSession) {
-      const detail = lastSession.details.find(d => d.exerciseId === exerciseId);
-      return {
-        load: detail?.series[0]?.load || 0,
-        reps: detail?.series[0]?.reps || 0
-      };
-    }
-    
-    // Procura na configuração inicial do exercício
+    // Como finishWorkout agora atualiza state.exercises com os valores da última sessão,
+    // a configuração inicial do exercício (state.exercises) sempre terá os valores mais recentes.
     const ex = state.exercises.find(e => e.id === exerciseId);
     return {
       load: ex?.load || 0,
@@ -164,6 +153,42 @@ export const useWorkoutManager = () => {
         exercises: {
           ...prev.exercises,
           [exerciseId]: exSeries.map(s => ({ ...s, ...updates }))
+        }
+      };
+    });
+  };
+
+  const addSeriesToDraft = (exerciseId: string) => {
+    setActiveDraft(prev => {
+      if (!prev) return null;
+      const exSeries = prev.exercises[exerciseId] || [];
+      const lastSeries = exSeries[exSeries.length - 1];
+      const newSeries: SeriesEntry = {
+        id: crypto.randomUUID(),
+        load: lastSeries ? lastSeries.load : 0,
+        reps: lastSeries ? lastSeries.reps : 0,
+        completed: false
+      };
+      return {
+        ...prev,
+        exercises: {
+          ...prev.exercises,
+          [exerciseId]: [...exSeries, newSeries]
+        }
+      };
+    });
+  };
+
+  const removeSeriesFromDraft = (exerciseId: string) => {
+    setActiveDraft(prev => {
+      if (!prev) return null;
+      const exSeries = prev.exercises[exerciseId] || [];
+      if (exSeries.length <= 1) return prev; // Mantém pelo menos 1 série
+      return {
+        ...prev,
+        exercises: {
+          ...prev.exercises,
+          [exerciseId]: exSeries.slice(0, -1)
         }
       };
     });
@@ -241,7 +266,27 @@ export const useWorkoutManager = () => {
       details
     };
 
-    setState(prev => ({ ...prev, sessions: [...prev.sessions, newSession] }));
+    setState(prev => {
+      // Atualizar load e reps base de cada exercício com os valores da última série completada
+      const updatedExercises = prev.exercises.map(ex => {
+        const sessionDetail = details.find(d => d.exerciseId === ex.id);
+        if (sessionDetail && sessionDetail.type === 'strength' && sessionDetail.series.length > 0) {
+          const lastSeries = sessionDetail.series[sessionDetail.series.length - 1];
+          return {
+            ...ex,
+            load: lastSeries.load,
+            reps: lastSeries.reps
+          };
+        }
+        return ex;
+      });
+
+      return {
+        ...prev,
+        exercises: updatedExercises,
+        sessions: [...prev.sessions, newSession]
+      };
+    });
     setActiveDraft(null);
   };
 
@@ -262,47 +307,54 @@ export const useWorkoutManager = () => {
     }));
   };
 
-  // Nova função segura para atualizar exercícios com verificação de histórico
-  const updateExerciseWithHistoryCheck = async (id: string, updates: Partial<Exercise>) => {
-    const currentEx = state.exercises.find(e => e.id === id);
-    if (!currentEx) return;
+  const addExerciseToActiveWorkout = (exercise: Omit<Exercise, 'id'>) => {
+    if (!activeDraft) return;
 
-    // Detectar mudanças críticas
-    const isCriticalChange = (
-      (updates.load !== undefined && updates.load !== currentEx.load) ||
-      (updates.sets !== undefined && updates.sets !== currentEx.sets) ||
-      (updates.reps !== undefined && updates.reps !== currentEx.reps)
-    );
+    const newId = crypto.randomUUID();
+    const maxSort = Math.max(0, ...state.exercises.map(e => e.sortOrder));
+    const newExercise = { ...exercise, id: newId, sortOrder: maxSort + 1 };
 
-    if (isCriticalChange) {
-      const confirm = await showDialog(
-        'confirm', 
-        'Alteração Crítica', 
-        'Alterar estes valores base pode apagar seu histórico de progressão para este exercício. Deseja continuar?'
-      );
+    // 1. Add to global state
+    setState(prev => ({
+      ...prev,
+      exercises: [...prev.exercises, newExercise]
+    }));
 
-      if (!confirm) return;
+    // 2. Add to active draft
+    setActiveDraft(prev => {
+      if (!prev) return null;
 
-      // Se confirmado, atualiza e limpa histórico deste exercício nas sessões passadas
-      // (Remove os detalhes deste exercício das sessões anteriores para "resetar" a noção de progressão)
-      setState(prev => {
-        const cleanSessions = prev.sessions.map(session => ({
-          ...session,
-          details: session.details.filter(d => d.exerciseId !== id)
-        })).filter(s => s.details.length > 0 || s.notes); // Mantém sessão se tiver outros detalhes ou notas
+      const draftExercises = { ...prev.exercises };
+      const cardioCompleted = { ...prev.cardioCompleted };
 
-        const updatedExercises = prev.exercises.map(e => e.id === id ? { ...e, ...updates } : e);
+      if (newExercise.type === 'strength') {
+        // Find history for this masterId to pre-fill if possible
+        const historySession = [...state.sessions].reverse().find(s => s.details.some(d => d.exerciseName === newExercise.name));
+        const historyDetail = historySession?.details.find(d => d.exerciseName === newExercise.name);
+        
+        const load = historyDetail && historyDetail.series.length > 0 ? historyDetail.series[historyDetail.series.length - 1].load : (newExercise.load || 10);
+        const reps = historyDetail && historyDetail.series.length > 0 ? historyDetail.series[historyDetail.series.length - 1].reps : (newExercise.reps || 10);
 
-        return {
-          ...prev,
-          exercises: updatedExercises,
-          sessions: cleanSessions
-        };
-      });
-      return;
-    }
+        draftExercises[newId] = Array.from({ length: newExercise.sets || 3 }).map(() => ({
+          id: crypto.randomUUID(),
+          load,
+          reps,
+          completed: false
+        }));
+      } else {
+        draftExercises[newId] = [];
+        cardioCompleted[newId] = false;
+      }
 
-    // Atualização normal (notas, ordem, etc)
+      return {
+        ...prev,
+        exercises: draftExercises,
+        cardioCompleted
+      };
+    });
+  };
+
+  const updateExercise = (id: string, updates: Partial<Exercise>) => {
     setState(prev => ({
       ...prev,
       exercises: prev.exercises.map(e => e.id === id ? { ...e, ...updates } : e)
@@ -322,6 +374,14 @@ export const useWorkoutManager = () => {
 
   const removeExercise = (id: string) => {
     setState(prev => ({ ...prev, exercises: prev.exercises.filter(e => e.id !== id) }));
+    setActiveDraft(prev => {
+      if (!prev) return null;
+      const newExercises = { ...prev.exercises };
+      delete newExercises[id];
+      const newCardioCompleted = { ...prev.cardioCompleted };
+      if (newCardioCompleted) delete newCardioCompleted[id];
+      return { ...prev, exercises: newExercises, cardioCompleted: newCardioCompleted };
+    });
   };
 
   const getGroupTags = (group: GroupLetter) => {
@@ -338,12 +398,15 @@ export const useWorkoutManager = () => {
     startWorkout,
     updateSeries,
     updateAllSeries,
+    addSeriesToDraft,
+    removeSeriesFromDraft,
     markCardioComplete,
     finishWorkout,
     removeSession,
     cancelWorkout: () => setActiveDraft(null),
     addExerciseToGroup,
-    updateExercise: updateExerciseWithHistoryCheck, // Usar a versão segura
+    addExerciseToActiveWorkout,
+    updateExercise,
     reorderExercises,
     removeExercise,
     exportData,

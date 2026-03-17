@@ -66,10 +66,10 @@ export const HomeScreen: React.FC<{ manager: any }> = ({ manager }) => {
               const muscleTags = getGroupTags(g);
 
               return (
-                <button
+                <div
                   key={g}
                   onClick={() => toggleGroup(g)}
-                  className={`relative flex flex-col items-start p-6 rounded-[2.5rem] border transition-all duration-300 text-left group overflow-hidden ${
+                  className={`relative flex flex-col items-start p-6 rounded-[2.5rem] border transition-all duration-300 text-left group overflow-hidden cursor-pointer ${
                     isSelected 
                     ? 'bg-blue-600 border-blue-500 text-white shadow-xl shadow-blue-600/30' 
                     : 'bg-zinc-900 border-zinc-800 text-zinc-500 hover:border-zinc-700'
@@ -117,7 +117,7 @@ export const HomeScreen: React.FC<{ manager: any }> = ({ manager }) => {
 
                   {/* Decorative Background */}
                   <div className={`absolute -right-4 -bottom-4 w-32 h-32 rounded-full blur-3xl transition-all ${isSelected ? 'bg-white/20' : 'bg-blue-900/10 group-hover:bg-blue-900/20'}`} />
-                </button>
+                </div>
               );
             })}
           </div>

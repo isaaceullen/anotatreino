@@ -372,7 +372,8 @@ export const INITIAL_DATA: AppState = {
   sessions: [],
   settings: {
     autoTimer: true,
-    restTimeSeconds: 60
+    restTimeSeconds: 60,
+    lockSets: true
   },
   schedule: { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] },
   logs: [],

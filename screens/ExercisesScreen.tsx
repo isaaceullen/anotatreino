@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { Search, Plus, Trash2, Save, Minus, Activity, Dumbbell, Check, ChevronRight, ArrowLeft, Lock, XCircle } from 'lucide-react';
+import { Search, Plus, Trash2, Save, Minus, Activity, Dumbbell, Check, ChevronRight, ArrowLeft, Lock, XCircle, ChevronDown } from 'lucide-react';
 import { Exercise, MasterExercise, GROUPS, GroupLetter } from '../types';
 import { MASTER_EXERCISES, CARDIO_MASTER_ID } from '../constants';
 
@@ -54,17 +54,19 @@ const Stepper = ({ value, onChange, step, label }: { value: number | string, onC
   );
 };
 
-export const ExercisesScreen: React.FC<{ manager: any }> = ({ manager }) => {
-  const { addExerciseToGroup, showDialog, state } = manager;
+export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalTargetGroup?: GroupLetter, onCloseModal?: () => void }> = ({ manager, isModal, modalTargetGroup, onCloseModal }) => {
+  const { addExerciseToGroup, addExerciseToActiveWorkout, showDialog, state } = manager;
   
   const [activeStep, setActiveStep] = useState<'catalog' | 'config'>('catalog');
   const [search, setSearch] = useState('');
   const [selectedMuscle, setSelectedMuscle] = useState<string | null>(null);
   const [showOnlyAdded, setShowOnlyAdded] = useState(false);
+  const [isGroupDropdownOpen, setIsGroupDropdownOpen] = useState(false);
   
   // Lista de exercícios selecionados para o lote
   const [selection, setSelection] = useState<any[]>([]);
   const [targetGroup, setTargetGroup] = useState<GroupLetter>(() => {
+    if (isModal && modalTargetGroup) return modalTargetGroup;
     const searchParams = new URLSearchParams(window.location.search);
     const group = searchParams.get('group');
     return (group as GroupLetter) || 'A';
@@ -163,11 +165,18 @@ export const ExercisesScreen: React.FC<{ manager: any }> = ({ manager }) => {
     const confirm = await showDialog('confirm', 'Salvar Treino?', `Adicionar ${selection.length} exercícios ao Grupo ${targetGroup}?`);
     if (confirm) {
       sanitizedSelection.forEach(item => {
-        addExerciseToGroup({ ...item, groupId: targetGroup } as Omit<Exercise, 'id'>);
+        if (isModal) {
+          addExerciseToActiveWorkout({ ...item, groupId: targetGroup } as Omit<Exercise, 'id'>);
+        } else {
+          addExerciseToGroup({ ...item, groupId: targetGroup } as Omit<Exercise, 'id'>);
+        }
       });
       setSelection([]);
       setActiveStep('catalog');
       showDialog('alert', 'Sucesso', 'Exercícios salvos no seu treino!');
+      if (isModal && onCloseModal) {
+        onCloseModal();
+      }
     }
   };
 
@@ -255,41 +264,56 @@ export const ExercisesScreen: React.FC<{ manager: any }> = ({ manager }) => {
     <div className="p-6 space-y-6 animate-in fade-in duration-500 pb-40">
 
     
- <header className="flex justify-between items-center pt-2">
-<div>
-<h2 className="text-3xl font-black italic uppercase tracking-tighter">Catálogo</h2>
-<div className="flex items-center gap-2 mt-1">
-<span className="text-zinc-500 font-bold uppercase text-[10px] tracking-widest">Adicionando ao:</span>
-<select
-value={targetGroup}
-onChange={e => { setTargetGroup(e.target.value as GroupLetter); setSelection([]); }}
-className="bg-zinc-900 border border-zinc-800 text-blue-500 font-black rounded-lg py-1 px-3 outline-none text-xs uppercase"
+      <header className="flex flex-col gap-4 pt-2 relative z-30">
+        <div className="flex justify-between items-start">
+          <div className="flex flex-col gap-2 relative">
+            <button 
+              onClick={() => !isModal && setIsGroupDropdownOpen(!isGroupDropdownOpen)}
+              className={`flex items-center gap-2 text-3xl font-black italic uppercase tracking-tighter transition-colors text-left leading-none ${isModal ? 'cursor-default' : 'hover:text-zinc-300'}`}
+            >
+              TREINO<br/>GRUPO {targetGroup}
+              {!isModal && <ChevronDown size={24} className={`transition-transform duration-300 ${isGroupDropdownOpen ? 'rotate-180' : ''}`} />}
+            </button>
+            
+            {selection.length > 0 && (
+              <span className="bg-blue-600 text-white px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-widest animate-pulse self-start">
+                {selection.length} Selecionados
+              </span>
+            )}
 
->
-
-{GROUPS.map(g => <option key={g} value={g}>Grupo {g}</option>)}
-</select>
-</div>
-</div>
-<div className="flex flex-col items-end gap-2">
-{selection.length > 0 && (
-<div className="bg-blue-600 text-white px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest animate-pulse">
-{selection.length} Selecionados
-</div>
-)}
-<button
-  onClick={() => setShowOnlyAdded(!showOnlyAdded)}
-  className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors border ${showOnlyAdded ? 'bg-blue-600 text-white border-blue-500' : 'bg-zinc-900 text-zinc-500 border-zinc-800 hover:text-white'}`}
->
-  {showOnlyAdded ? 'Ver Todos' : 'Meus Exercícios'}
-</button>
-</div>
-
-</header>
-
+            {/* Dropdown Menu */}
+            {isGroupDropdownOpen && (
+              <div className="absolute top-full left-0 mt-2 w-48 bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl overflow-hidden z-50">
+                {GROUPS.map(g => (
+                  <button
+                    key={g}
+                    onClick={() => { 
+                      setTargetGroup(g); 
+                      setSelection([]); 
+                      setIsGroupDropdownOpen(false);
+                    }}
+                    className={`w-full text-left px-6 py-4 font-black italic uppercase transition-colors ${targetGroup === g ? 'bg-blue-600 text-white' : 'text-zinc-400 hover:bg-zinc-800 hover:text-white'}`}
+                  >
+                    Grupo {g}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowOnlyAdded(!showOnlyAdded)}
+              className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors border whitespace-nowrap ${showOnlyAdded ? 'bg-blue-600 text-white border-blue-500' : 'bg-zinc-900 text-zinc-500 border-zinc-800 hover:text-white'}`}
+            >
+              {showOnlyAdded ? 'Ver Todos' : 'Filtrar'}
+            </button>
+          </div>
+        </div>
+      </header>
 
       {/* Busca e Filtros */}
-      <div className="space-y-4 sticky top-0 bg-black/95 backdrop-blur-xl z-20 py-2 -mx-2 px-2 border-b border-zinc-900/50">
+      <div className="space-y-4 sticky top-0 bg-black/95 backdrop-blur-xl z-20 py-2 -mx-2 px-2 border-b border-zinc-900/50 mt-6">
          <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600" size={18} />
             <input 

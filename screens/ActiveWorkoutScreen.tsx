@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Timer as TimerIcon, Save, XCircle, ChevronRight, Check, ArrowUp, ArrowDown, Activity, ListOrdered, Minus, Plus } from 'lucide-react';
+import { Timer as TimerIcon, Save, XCircle, ChevronRight, Check, ArrowUp, ArrowDown, Activity, ListOrdered, Minus, Plus, MoreVertical, Trash2, Settings } from 'lucide-react';
 import { RestTimerOverlay } from '../components/RestTimerOverlay';
+import { ExercisesScreen } from './ExercisesScreen';
 import { CARDIO_MASTER_ID } from '../constants';
 
 // Componente de Input Inteligente com Steppers (+/-)
@@ -73,10 +74,13 @@ const SmartStepper = ({ value, onChange, step, suffix, textColor = 'text-white',
 };
 
 export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => {
-  const { activeDraft, updateSeries, updateAllSeries, markCardioComplete, finishWorkout, cancelWorkout, reorderExercises, state, showDialog, getLastSessionData, getMaster } = manager;
+  const { activeDraft, updateSeries, updateAllSeries, addSeriesToDraft, removeSeriesFromDraft, markCardioComplete, finishWorkout, cancelWorkout, reorderExercises, state, showDialog, getLastSessionData, getMaster } = manager;
   const [showSummary, setShowSummary] = useState(false);
   const [notes, setNotes] = useState('');
   const [timerVisible, setTimerVisible] = useState(false);
+  const [expandedGif, setExpandedGif] = useState<string | null>(null);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [showExercisesModal, setShowExercisesModal] = useState(false);
   
   // Reordering State
   const [isReordering, setIsReordering] = useState(false);
@@ -86,6 +90,17 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
   const [showTimeoutModal, setShowTimeoutModal] = useState(false);
   const [timeoutSeconds, setTimeoutSeconds] = useState(300); 
   const inactivityCheckRef = useRef<any>(null);
+
+  const handleDeleteExercise = (exId: string) => {
+    showDialog(
+      'confirm',
+      'Excluir Exercício',
+      'Excluir permanentemente este exercício deste grupo?',
+      () => {
+        manager.removeExercise(exId);
+      }
+    );
+  };
 
   useEffect(() => {
     inactivityCheckRef.current = setInterval(() => {
@@ -232,12 +247,75 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
               <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-[0.2em]">Sessão Ativa</span>
             </div>
             <div className="flex gap-2">
-              <button onClick={toggleReorderMode} className="w-10 h-10 bg-zinc-900 rounded-xl flex items-center justify-center text-zinc-400"><ListOrdered size={18} /></button>
-              <button onClick={() => setTimerVisible(true)} className="w-10 h-10 bg-zinc-900 rounded-xl flex items-center justify-center text-blue-500"><TimerIcon size={18} /></button>
+              <button onClick={() => setIsBottomSheetOpen(true)} className="w-10 h-10 bg-zinc-900 rounded-xl flex items-center justify-center text-zinc-400 hover:text-white transition-colors"><MoreVertical size={20} /></button>
             </div>
           </>
         )}
       </header>
+
+      {/* Bottom Sheet de Opções */}
+      {isBottomSheetOpen && (
+        <div className="fixed inset-0 z-[60] flex flex-col justify-end">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsBottomSheetOpen(false)} />
+          <div className="relative bg-zinc-900 rounded-t-[2rem] p-6 pb-10 animate-in slide-in-from-bottom duration-300">
+            <div className="w-12 h-1.5 bg-zinc-700 rounded-full mx-auto mb-6" />
+            
+            <div className="space-y-2">
+              <button 
+                onClick={() => { setIsBottomSheetOpen(false); toggleReorderMode(); }}
+                className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-zinc-800 transition-colors text-left"
+              >
+                <div className="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-zinc-400">
+                  <ListOrdered size={20} />
+                </div>
+                <div>
+                  <h3 className="font-black uppercase italic text-sm text-white">Reordenar Lista</h3>
+                  <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Mude a ordem dos exercícios</p>
+                </div>
+              </button>
+
+              <button 
+                onClick={() => { setIsBottomSheetOpen(false); setTimerVisible(true); }}
+                className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-zinc-800 transition-colors text-left"
+              >
+                <div className="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-blue-500">
+                  <TimerIcon size={20} />
+                </div>
+                <div>
+                  <h3 className="font-black uppercase italic text-sm text-white">Timer de Descanso</h3>
+                  <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Controle suas pausas</p>
+                </div>
+              </button>
+
+              <button 
+                onClick={() => { setIsBottomSheetOpen(false); setShowExercisesModal(true); }}
+                className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-zinc-800 transition-colors text-left"
+              >
+                <div className="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-green-500">
+                  <Plus size={20} />
+                </div>
+                <div>
+                  <h3 className="font-black uppercase italic text-sm text-white">Adicionar Exercícios</h3>
+                  <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Busque no acervo</p>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Exercícios */}
+      {showExercisesModal && (
+        <div className="fixed inset-0 z-[70] bg-black overflow-y-auto">
+          <div className="sticky top-0 z-50 bg-black/80 backdrop-blur-xl px-4 py-4 border-b border-zinc-900 flex items-center">
+            <button onClick={() => setShowExercisesModal(false)} className="p-2 text-zinc-400 hover:text-white mr-2">
+              <XCircle size={24} />
+            </button>
+            <h2 className="text-lg font-black italic uppercase">Adicionar ao Treino</h2>
+          </div>
+          <ExercisesScreen manager={manager} isModal={true} modalTargetGroup={activeDraft.selectedGroups[0]} onCloseModal={() => setShowExercisesModal(false)} />
+        </div>
+      )}
 
       {/* 2. CORPO SCROLLÁVEL */}
       <div className="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-6 pb-40">
@@ -288,8 +366,13 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
                       </div>
                       <h4 className="text-base font-black italic uppercase text-white whitespace-normal leading-tight">{displayName}</h4>
                     </div>
-                    <div className="p-2 bg-zinc-800 rounded-xl text-zinc-400">
-                      <Activity size={16} />
+                    <div className="flex gap-2">
+                      <button onClick={() => handleDeleteExercise(exId)} className="p-2 bg-zinc-800 rounded-xl text-zinc-400 hover:text-red-500 transition-colors">
+                        <Trash2 size={16} />
+                      </button>
+                      <div className="p-2 bg-zinc-800 rounded-xl text-zinc-400">
+                        <Activity size={16} />
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
@@ -315,34 +398,42 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
             return (
               <div key={exId} className="bg-zinc-900 border border-zinc-800 rounded-[2rem] overflow-hidden group relative flex flex-col">
                 
-                {/* 2.1 CABEÇALHO DO CARD (GIF) - FLEX NONE */}
-                <div className="flex-none relative w-full h-48 bg-black">
-                   {displayUrl ? (
-                      <img src={displayUrl} className="w-full h-full object-cover opacity-80" alt={displayName} />
-                   ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-zinc-800">
-                         <Activity size={32} className="text-zinc-600" />
-                      </div>
-                   )}
-                   <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent" />
-                   
-                   {/* Title Overlay */}
-                   <div className="absolute bottom-4 left-5 right-5 pointer-events-none">
-                      <h4 className="text-xl font-black italic uppercase text-white leading-none drop-shadow-md">{displayName}</h4>
-                      {ex.notes && (
-                         <p className="text-xs text-zinc-300 font-medium mt-1 drop-shadow-md line-clamp-2">
-                           "{ex.notes}"
-                         </p>
+                {/* 2.1 CABEÇALHO DO CARD (GIF + INFO) */}
+                <div className="p-4 flex gap-4 border-b border-zinc-800/50 relative">
+                   <button 
+                     onClick={() => handleDeleteExercise(exId)} 
+                     className="absolute top-4 right-4 p-2 bg-zinc-800 rounded-xl text-zinc-400 hover:text-red-500 transition-colors z-10"
+                   >
+                     <Trash2 size={16} />
+                   </button>
+                   <div 
+                     className="w-28 h-28 flex-none bg-black rounded-2xl overflow-hidden relative cursor-pointer border border-zinc-800"
+                     onClick={() => displayUrl && setExpandedGif(displayUrl)}
+                   >
+                     {displayUrl ? (
+                        <img src={displayUrl} className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" alt={displayName} />
+                     ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-zinc-800">
+                           <Activity size={32} className="text-zinc-600" />
+                        </div>
+                     )}
+                   </div>
+                   <div className="flex-1 min-w-0 flex flex-col justify-center">
+                      <h4 className="text-lg font-black italic uppercase text-white leading-tight whitespace-normal">{displayName}</h4>
+                      {master?.targetMuscles && (
+                        <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mt-1 block">
+                          {master.targetMuscles.join(' + ')}
+                        </span>
                       )}
-                      {!ex.notes && (
-                         <p className="text-[10px] font-black text-zinc-400 uppercase tracking-tighter mt-1">
-                           Histórico: {lastData.load}kg x {lastData.reps}
+                      {ex.notes && (
+                         <p className="text-[10px] text-zinc-500 font-medium mt-1 leading-tight">
+                           {ex.notes}
                          </p>
                       )}
                       
                       {/* Badge de Carga */}
                       <div className="mt-2 flex">
-                          <span className={`text-[9px] font-black uppercase bg-black/50 backdrop-blur px-2 py-1 rounded ${delta > 0 ? 'text-green-500' : delta < 0 ? 'text-red-500' : 'text-zinc-500'}`}>
+                          <span className={`text-[9px] font-black uppercase bg-black/50 backdrop-blur px-2 py-1 rounded border border-zinc-800 ${delta > 0 ? 'text-green-500' : delta < 0 ? 'text-red-500' : 'text-zinc-500'}`}>
                              {delta > 0 ? `▲ +${delta}kg Progressão` : delta < 0 ? `▼ ${delta}kg` : 'Carga Mantida'}
                           </span>
                       </div>
@@ -350,7 +441,7 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
                 </div>
 
                 {/* 2.2 CORPO DO CARD (CONTROLES GLOBAIS + SÉRIES) */}
-                <div className="p-5">
+                <div className="p-4">
                   {state.settings.autoTimer ? (
                     // MODO DETALHADO (TIMER LIGADO)
                     // Layout: Inputs em cima, Bolinhas em baixo
@@ -376,8 +467,20 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
                       
                       {/* Lista de Checkboxes Individuais (Bolinhas) */}
                       <div className="bg-zinc-950/50 rounded-2xl p-4 border border-zinc-800/50">
+                        <div className="flex items-center justify-between mb-3">
+                           <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Séries ({series.length})</span>
+                           {!state.settings.lockSets && (
+                             <div className="flex items-center gap-1">
+                                <button onClick={() => removeSeriesFromDraft(exId)} className="w-6 h-6 rounded-md bg-zinc-900 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors">
+                                   <Minus size={14} strokeWidth={3} />
+                                </button>
+                                <button onClick={() => addSeriesToDraft(exId)} className="w-6 h-6 rounded-md bg-zinc-900 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors">
+                                   <Plus size={14} strokeWidth={3} />
+                                </button>
+                             </div>
+                           )}
+                        </div>
                         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
-                           <span className="text-[10px] font-black text-zinc-600 uppercase mr-2 tracking-widest">Séries:</span>
                            {series.map((s: any, idx: number) => (
                              <button
                                key={s.id}
@@ -416,19 +519,29 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
                           />
                       </div>
                       
-                      <div className="flex items-center self-stretch">
+                      <div className="flex flex-col items-center justify-center gap-2">
+                        {!state.settings.lockSets && (
+                          <div className="flex items-center gap-1">
+                             <button onClick={() => removeSeriesFromDraft(exId)} className="w-8 h-8 rounded-lg bg-zinc-900 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors">
+                                <Minus size={16} strokeWidth={3} />
+                             </button>
+                             <button onClick={() => addSeriesToDraft(exId)} className="w-8 h-8 rounded-lg bg-zinc-900 flex items-center justify-center text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors">
+                                <Plus size={16} strokeWidth={3} />
+                             </button>
+                          </div>
+                        )}
                         <button 
                           onClick={() => handleBulkCheck(exId, allCompleted)} 
-                          className={`w-20 h-full min-h-[100px] rounded-2xl flex items-center justify-center transition-all border-2 relative overflow-hidden active:scale-95 ${allCompleted ? 'bg-blue-600 border-blue-400 text-white shadow-xl' : 'bg-zinc-900 border-zinc-800 text-zinc-700'}`}
+                          className={`w-20 flex-1 min-h-[60px] rounded-2xl flex items-center justify-center transition-all border-2 relative overflow-hidden active:scale-95 ${allCompleted ? 'bg-blue-600 border-blue-400 text-white shadow-xl' : 'bg-zinc-900 border-zinc-800 text-zinc-700'}`}
                         >
                           {allCompleted ? (
                              <>
-                               <span className="absolute inset-0 flex items-center justify-center text-4xl font-black text-white/20 select-none pb-1">{ex?.sets}</span>
+                               <span className="absolute inset-0 flex items-center justify-center text-4xl font-black text-white/20 select-none pb-1">{series.length}</span>
                                <Check size={32} strokeWidth={4} className="relative z-10" />
                              </>
                           ) : (
                              <div className="flex flex-col items-center">
-                               <span className="text-2xl font-black leading-none">{ex?.sets}</span>
+                               <span className="text-2xl font-black leading-none">{series.length}</span>
                                <span className="text-[9px] font-black uppercase tracking-widest">Séries</span>
                              </div>
                           )}
@@ -465,6 +578,23 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
                  <button onClick={handleContinue} className="flex-1 py-4 rounded-2xl bg-blue-600 text-white font-black uppercase text-xs tracking-widest">Continuar</button>
               </div>
            </div>
+        </div>
+      )}
+
+      {expandedGif && (
+        <div 
+          className="fixed inset-0 z-[300] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setExpandedGif(null)}
+        >
+          <div className="relative max-w-lg w-full bg-zinc-900 rounded-3xl overflow-hidden border border-zinc-800" onClick={e => e.stopPropagation()}>
+            <button 
+              onClick={() => setExpandedGif(null)}
+              className="absolute top-4 right-4 w-10 h-10 bg-black/50 backdrop-blur rounded-full flex items-center justify-center text-white hover:bg-black/80 transition-colors z-10"
+            >
+              <XCircle size={24} />
+            </button>
+            <img src={expandedGif} className="w-full h-auto object-contain" alt="Exercício" />
+          </div>
         </div>
       )}
     </div>

@@ -128,9 +128,9 @@ export const ConfigScreen: React.FC<{ manager: any }> = ({ manager }) => {
 
                     {ex.type === 'strength' ? (
                        <div className="grid grid-cols-3 gap-3 mb-4">
-                          <Stepper label="Carga" value={ex.load} step={5} onChange={(v) => updateExercise(ex.id, { load: v })} />
+                          <Stepper label="Carga" value={manager.getLastSessionData(ex.id).load} step={5} onChange={(v) => updateExercise(ex.id, { load: v })} />
                           <Stepper label="Séries" value={ex.sets} step={1} onChange={(v) => updateExercise(ex.id, { sets: v })} />
-                          <Stepper label="Reps" value={ex.reps} step={1} onChange={(v) => updateExercise(ex.id, { reps: v })} />
+                          <Stepper label="Reps" value={manager.getLastSessionData(ex.id).reps} step={1} onChange={(v) => updateExercise(ex.id, { reps: v })} />
                        </div>
                     ) : (
                        <div className="bg-zinc-800/50 p-3 rounded-xl mb-4 text-center">
@@ -265,6 +265,19 @@ export const ConfigScreen: React.FC<{ manager: any }> = ({ manager }) => {
               className={`w-14 h-8 rounded-full transition-all relative ${state.settings.autoTimer ? 'bg-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.4)]' : 'bg-zinc-800'}`}
             >
               <div className={`absolute top-1 w-6 h-6 rounded-full bg-white transition-all ${state.settings.autoTimer ? 'left-7' : 'left-1'}`} />
+            </button>
+          </div>
+
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="font-bold text-sm italic uppercase">Trancar Séries</p>
+              <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-wider">Ocultar botões de adicionar/remover séries</p>
+            </div>
+            <button 
+              onClick={() => setState((prev: any) => ({ ...prev, settings: { ...prev.settings, lockSets: !prev.settings.lockSets }}))}
+              className={`w-14 h-8 rounded-full transition-all relative ${state.settings.lockSets ? 'bg-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.4)]' : 'bg-zinc-800'}`}
+            >
+              <div className={`absolute top-1 w-6 h-6 rounded-full bg-white transition-all ${state.settings.lockSets ? 'left-7' : 'left-1'}`} />
             </button>
           </div>
         </section>

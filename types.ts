@@ -117,6 +117,7 @@ export interface WorkoutHistory {
 export interface AppSettings {
   autoTimer: boolean;
   restTimeSeconds: number;
+  lockSets: boolean;
 }
 
 export interface AppState {
