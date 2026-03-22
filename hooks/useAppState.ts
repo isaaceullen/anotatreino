@@ -13,7 +13,8 @@ const INITIAL_STATE: AppState = {
   sessions: [],
   settings: {
     autoTimer: true,
-    restTimeSeconds: 60
+    restTimeSeconds: 60,
+    lockSets: false
   },
   history: []
 };
