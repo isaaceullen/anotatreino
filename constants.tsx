@@ -6,18 +6,18 @@ export const CARDIO_MASTER_ID = 'cardio_generic_v1';
 export const MASTER_EXERCISES: MasterExercise[] = [
   { "id": "custom_ex_01", "name": "Supino reto na máquina", "targetMuscles": ["Peito", "Ombro", "Tríceps"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/04/lever-chest-press-.gif" },
   { "id": "custom_ex_02", "name": "Supino reto com Barra", "targetMuscles": ["Peito", "Ombro", "Tríceps"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2017/09/barbell-bench-press.gif" },
-  { "id": "custom_ex_03", "name": "Supino inclinado com halteres", "targetMuscles": ["Peito", "Ombro"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/supino-inclinado-com-halteres.gif" },
+  { "id": "custom_ex_03", "name": "Supino inclinado com halteres", "targetMuscles": ["Peito", "Ombro", "Tríceps"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/supino-inclinado-com-halteres.gif" },
   { "id": "custom_ex_04", "name": "Pec Deck (Voador aberto)", "targetMuscles": ["Peito"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/voador-no-aparelho.gif" },
   { "id": "custom_ex_05", "name": "Crucifixo reto deitado com halteres", "targetMuscles": ["Peito"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2019/11/03081301-crucifixo-com-halteres.gif" },
-  { "id": "custom_ex_06", "name": "Desenvolvimento na máquina", "targetMuscles": ["Ombro"], "gifUrl": "https://media.tenor.com/drQHW1DWPo0AAAAM/desenvolvimento-maquina.gif" },
-  { "id": "custom_ex_07", "name": "Desenvolvimento com halteres Sentado", "targetMuscles": ["Ombro"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/desenvolvimento-para-ombros-com-halteres.gif" },
+  { "id": "custom_ex_06", "name": "Desenvolvimento na máquina", "targetMuscles": ["Ombro", "Tríceps"], "gifUrl": "https://media.tenor.com/drQHW1DWPo0AAAAM/desenvolvimento-maquina.gif" },
+  { "id": "custom_ex_07", "name": "Desenvolvimento com halteres Sentado", "targetMuscles": ["Ombro", "Tríceps"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/desenvolvimento-para-ombros-com-halteres.gif" },
   { "id": "custom_ex_08", "name": "Elevação lateral em Pé com Halteres", "targetMuscles": ["Ombro"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Elevacao-Lateral-com-Halteres.gif" },
   { "id": "custom_ex_09", "name": "Elevação frontal com anilha", "targetMuscles": ["Ombro"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2018/09/elevacao-frontal-com-anilha-v2.gif" },
   { "id": "custom_ex_11", "name": "Tríceps francês unilateral c/ halteres", "targetMuscles": ["Tríceps"], "gifUrl": "https://i0.wp.com/omelhortreino.com.br/wp-content/uploads/2025/06/triceps-frances-com-halteres-unilateral-1.gif?resize=550%2C550&ssl=1" },
   { "id": "custom_ex_12", "name": "Tríceps pulley com Barra", "targetMuscles": ["Tríceps"], "gifUrl": "https://treinoemalta.com.br/wp-content/uploads/2023/07/Triceps-Pulley-Barra.gif" },
   { "id": "custom_ex_13", "name": "Tríceps testa Barra W Inclinado", "targetMuscles": ["Tríceps"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/07/triceps-testa-no-banco-inclinado.gif" },
   { "id": "custom_ex_14", "name": "Puxador frente aberto", "targetMuscles": ["Costas", "Bíceps"], "gifUrl": "https://image.tuasaude.com/media/article/uh/yp/puxada-frontal_75625.gif?width=686&height=487" },
-  { "id": "custom_ex_16", "name": "Puxador frente com triângulo", "targetMuscles": ["Costas"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/costas-puxada-para-frente-no-pulley-com-triangulo.gif" },
+  { "id": "custom_ex_16", "name": "Puxador frente com triângulo", "targetMuscles": ["Costas", "Bíceps"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/costas-puxada-para-frente-no-pulley-com-triangulo.gif" },
   { "id": "custom_ex_17", "name": "Remada polia baixa (Triângulo)", "targetMuscles": ["Costas", "Bíceps"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/09/remada-sentado-com-cabos-e-triangulo-para-costas.gif" },
   { "id": "custom_ex_18", "name": "Remada Cavalinho", "targetMuscles": ["Costas", "Bíceps"], "gifUrl": "https://treinototal.com.br/wp-content/uploads/2025/06/remada-cavalinho.gif" },
   { "id": "custom_ex_19", "name": "Encolhimento de Ombros com halteres", "targetMuscles": ["Trapézio", "Ombro"], "gifUrl": "https://treinomestre.com.br/wp-content/uploads/2016/01/encolhimento-de-ombros-com-halter.gif" },
@@ -29,7 +29,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   { "id": "custom_ex_26", "name": "Cadeira Extensora", "targetMuscles": ["Perna", "Quadríceps"], "gifUrl": "https://image.tuasaude.com/media/article/ov/fb/cadeira-extensora_75064.gif?width=686&height=487" },
   { "id": "custom_ex_27", "name": "Cadeira Flexora", "targetMuscles": ["Perna", "Posterior"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/12/cadeira-flexora.gif" },
   { "id": "custom_ex_28", "name": "Cadeira Abdutora", "targetMuscles": ["Perna", "Glúteo"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/04/pernas-abducao-de-pernas-na-maquina.gif" },
-  { "id": "custom_ex_29", "name": "Cadeira Adutora", "targetMuscles": ["Perna"], "gifUrl": "https://i.pinimg.com/originals/4e/17/b8/4e17b88b6b11c54155939c0a5b3c3381.gif" },
+  { "id": "custom_ex_29", "name": "Cadeira Adutora", "targetMuscles": ["Perna", "Adutores"], "gifUrl": "https://i.pinimg.com/originals/4e/17/b8/4e17b88b6b11c54155939c0a5b3c3381.gif" },
   { "id": "custom_ex_31", "name": "Leg press 45", "targetMuscles": ["Perna", "Quadríceps", "Glúteo"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/pernas-leg-press-45-com-joelhos-no-peito.gif" },
   { "id": "custom_ex_32", "name": "Agachamento (Peso Corporal)", "targetMuscles": ["Perna", "Quadríceps", "Glúteo"], "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2023/07/bodyweight-squat.gif" },
   { "id": "custom_ex_33", "name": "Agachamento Livre com Barra", "targetMuscles": ["Perna", "Quadríceps", "Glúteo"], "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/11/agachamento-com-barra.gif" },
@@ -49,7 +49,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_42",
     "name": "Remada baixa Supinada",
-    "targetMuscles": ["Costas"],
+    "targetMuscles": ["Costas", "Bíceps"],
     "gifUrl": "https://static.wixstatic.com/media/2edbed_d022143e985c4f02854c12257d16ce91~mv2.gif"
   },
   {
@@ -79,13 +79,13 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_47",
     "name": "Afundo no smith",
-    "targetMuscles": ["Perna"],
+    "targetMuscles": ["Perna", "Quadríceps", "Glúteo"],
     "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/agachamento-afundo-no-smith-machine.gif"
   },
   {
     "id": "custom_ex_48",
     "name": "Stiff com Barra",
-    "targetMuscles": ["Perna", "Posterior"],
+    "targetMuscles": ["Perna", "Posterior", "Glúteo"],
     "gifUrl": "https://static.wixstatic.com/media/2edbed_5cd71a451e8f4210b1c1538ea54c03b6~mv2.gif"
   },
   {
@@ -127,7 +127,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_56",
     "name": "Supino inclinado smith",
-    "targetMuscles": ["Peito"],
+    "targetMuscles": ["Peito", "Ombro", "Tríceps"],
     "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2023/09/smith-incline-bench-press.gif"
   },
   {
@@ -205,7 +205,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_69",
     "name": "Hack Squat",
-    "targetMuscles": ["Perna", "Quadríceps"],
+    "targetMuscles": ["Perna", "Quadríceps", "Glúteo"],
     "gifUrl": "https://image.tuasaude.com/media/article/cu/uv/agachamento-hack_75592.gif"
   },
   {
@@ -283,7 +283,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_82",
     "name": "Remada Maquina Neutra",
-    "targetMuscles": ["Costas"],
+    "targetMuscles": ["Costas", "Bíceps"],
     "gifUrl": "https://image.tuasaude.com/media/article/dm/wv/remada_75622.gif"
   },
   {
@@ -301,25 +301,25 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_85",
     "name": "Supino Inclinado Máquina",
-    "targetMuscles": ["Peito", "Ombro"],
+    "targetMuscles": ["Peito", "Ombro", "Tríceps"],
     "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/07/lever-incline-chest-press.gif"
   },
   {
     "id": "custom_ex_86",
     "name": "Puxada Frente máquina supinada",
-    "targetMuscles": ["Costas"],
+    "targetMuscles": ["Costas", "Bíceps"],
     "gifUrl": "https://musclemagfitness.com/wp-content/uploads/reverse-grip-lat-pulldown-exercise.gif"
   },
   {
     "id": "custom_ex_87",
     "name": "Agachamento Hack Machine",
-    "targetMuscles": ["Coxa", "Glúteo", "Posterior"],
+    "targetMuscles": ["Perna", "Quadríceps", "Glúteo", "Posterior"],
     "gifUrl": "https://treinomestre.com.br/wp-content/uploads/2023/11/agachamento-hck-invertido-Reverse-Hack-Squat-.gif"
   },
   {
     "id": "custom_ex_88",
     "name": "Flexora em Pé",
-    "targetMuscles": ["Coxa", "Glúteo", "Posterior"],
+    "targetMuscles": ["Perna", "Posterior"],
     "gifUrl": "https://fitnessprogramer.com/wp-content/uploads/2021/09/Lever-Kneeling-Leg-Curl-.gif"
   },
   {
@@ -343,7 +343,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_92",
     "name": "Remada unilateral com halteres",
-    "targetMuscles": ["Tríceps"],
+    "targetMuscles": ["Costas", "Bíceps"],
     "gifUrl": "https://fitliferegime.com/wp-content/uploads/2023/05/One-Arm-Dumbbell-Row.gif"
   },
   {
@@ -367,13 +367,13 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_96",
     "name": "Leg Press horizontal",
-    "targetMuscles": ["Quadríceps", "Glúteo", "Panturrilha"],
+    "targetMuscles": ["Perna", "Quadríceps", "Glúteo", "Panturrilha"],
     "gifUrl": "https://fitnessprogramer.com/wp-content/uploads/2021/08/Lever-Horizontal-Leg-Press.gif"
   },
   {
     "id": "custom_ex_97",
     "name": "Agachamento Búlgaro",
-    "targetMuscles": ["Quadríceps", "Glúteo", "Posterior"],
+    "targetMuscles": ["Perna", "Quadríceps", "Glúteo", "Posterior"],
     "gifUrl": "https://image.tuasaude.com/media/article/dv/bw/agachamento-bulgaro_62764.gif"
   },
   {
@@ -397,7 +397,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   {
     "id": "custom_ex_101",
     "name": "Agachamento sumô",
-    "targetMuscles": ["Perna", "Quadríceps", "Glúteo"],
+    "targetMuscles": ["Perna", "Quadríceps", "Glúteo", "Adutores"],
     "gifUrl": "https://image.tuasaude.com/media/article/qu/vm/agachamento-sumo_75036.gif"
   }
 ];
