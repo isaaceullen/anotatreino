@@ -11,8 +11,9 @@ import {
   startOfWeek 
 } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from 'recharts';
-import { ChevronLeft, ChevronRight, X, Clock, Dumbbell, Activity, TrendingUp, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+import { ChevronLeft, ChevronRight, X, Clock, Dumbbell, Activity, TrendingUp, TrendingDown, Trash2, ChevronDown, ChevronUp, Trophy, Target } from 'lucide-react';
+import { WorkoutHistory } from '../types';
 
 const SessionAccordion: React.FC<{ session: any; index: number; onDelete: (id: string) => void }> = ({ session, index, onDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,7 +29,7 @@ const SessionAccordion: React.FC<{ session: any; index: number; onDelete: (id: s
             {index + 1}
           </div>
           <div>
-            <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Sessão • {session.durationMinutes}min</p>
+            <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{format(parseISO(session.date), 'dd/MM/yyyy')} • {session.durationMinutes}min</p>
             <h4 className="text-lg font-black italic uppercase text-white leading-none">Split {session.groups.join(' + ')}</h4>
           </div>
         </div>
@@ -109,30 +110,92 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
     return getSessionsForDay(selectedDay);
   }, [selectedDay, state.sessions]);
 
-  const [selectedExerciseId, setSelectedExerciseId] = useState<string>(state.exercises[0]?.id || '');
+  // 1. CARDS DE RECORDES PESSOAIS (PRs)
+  const personalRecords = useMemo(() => {
+    const prs: Record<string, number> = {};
+    
+    (state.history || []).forEach((h: WorkoutHistory) => {
+      if (!prs[h.exerciseName] || h.load > prs[h.exerciseName]) {
+        prs[h.exerciseName] = h.load;
+      }
+    });
+    
+    const targetExercises = ["Supino", "Agachamento", "Leg Press", "Levantamento Terra", "Deadlift", "Squat", "Bench Press"];
+    
+    return Object.entries(prs)
+      .map(([name, load]) => ({ name, load }))
+      .sort((a, b) => {
+        const aIsTarget = targetExercises.some(t => a.name.toLowerCase().includes(t.toLowerCase()));
+        const bIsTarget = targetExercises.some(t => b.name.toLowerCase().includes(t.toLowerCase()));
+        if (aIsTarget && !bIsTarget) return -1;
+        if (!aIsTarget && bIsTarget) return 1;
+        return b.load - a.load;
+      })
+      .slice(0, 3);
+  }, [state.history]);
 
-  const volumeChartData = useMemo(() => {
-    return (state.sessions || []).slice(-7).map((s: any) => ({
-      date: format(parseISO(s.date), 'dd/MM'),
-      volume: s.volume
+  // 2. GRÁFICO DE RADAR (EQUILÍBRIO MUSCULAR)
+  const muscleBalance = useMemo(() => {
+    const counts: Record<string, number> = {};
+    
+    (state.history || []).forEach((h: WorkoutHistory) => {
+      const exercise = (state.exercises || []).find((e: any) => e.id === h.exerciseId);
+      if (exercise && exercise.targetMuscles) {
+        exercise.targetMuscles.forEach((muscle: string) => {
+          counts[muscle] = (counts[muscle] || 0) + 1;
+        });
+      }
+    });
+    
+    return Object.entries(counts).map(([muscle, count]) => ({
+      subject: muscle,
+      A: count,
+      fullMark: Math.max(...Object.values(counts), 10)
     }));
-  }, [state.sessions]);
+  }, [state.history, state.exercises]);
 
-  const exerciseEvolutionData = useMemo(() => {
-    if (!selectedExerciseId) return [];
-    
-    const relevantSessions = (state.sessions || [])
-      .filter((s: any) => s.details.some((d: any) => d.exerciseId === selectedExerciseId))
-      .map((s: any) => {
-        const detail = s.details.find((d: any) => d.exerciseId === selectedExerciseId);
-        return {
-          date: format(parseISO(s.date), 'dd/MM'),
-          load: detail?.series[0]?.load || 0
-        };
-      });
-    
-    return relevantSessions;
-  }, [state.sessions, selectedExerciseId]);
+  // 3. COMPARATIVO DE VOLUME SEMANAL
+  const weeklyComparison = useMemo(() => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    const sevenDaysAgo = today - 7 * 24 * 60 * 60 * 1000;
+    const fourteenDaysAgo = today - 14 * 24 * 60 * 60 * 1000;
+
+    let currentWeekVolume = 0;
+    let previousWeekVolume = 0;
+
+    (state.history || []).forEach((h: WorkoutHistory) => {
+      const historyDate = new Date(h.date).getTime();
+      const adjustedHistoryDate = historyDate + new Date(historyDate).getTimezoneOffset() * 60000;
+      
+      const volume = h.load * h.reps * h.sets;
+
+      if (adjustedHistoryDate >= sevenDaysAgo && adjustedHistoryDate <= today) {
+        currentWeekVolume += volume;
+      } else if (adjustedHistoryDate >= fourteenDaysAgo && adjustedHistoryDate < sevenDaysAgo) {
+        previousWeekVolume += volume;
+      }
+    });
+
+    let percentageChange = 0;
+    if (previousWeekVolume > 0) {
+      percentageChange = ((currentWeekVolume - previousWeekVolume) / previousWeekVolume) * 100;
+    } else if (currentWeekVolume > 0) {
+      percentageChange = 100;
+    }
+
+    return {
+      currentWeekVolume,
+      previousWeekVolume,
+      percentageChange: Math.round(percentageChange)
+    };
+  }, [state.history]);
+
+  const recentSessions = useMemo(() => {
+    return [...(state.sessions || [])]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 10);
+  }, [state.sessions]);
 
   const handleDeleteSession = async (sessionId: string) => {
     const confirm = await showDialog('confirm', 'Excluir Treino?', 'Este registro será removido permanentemente.');
@@ -143,109 +206,154 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
 
   return (
     <div className="h-full overflow-y-auto scrollbar-hide">
-      <div className="p-6 space-y-10 animate-in fade-in duration-500 pb-32">
-        <header className="flex justify-between items-center pt-4">
-          <h2 className="text-3xl font-black italic uppercase tracking-tighter">Evolução</h2>
-          <div className="flex gap-2">
-            <button onClick={() => setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1))} className="p-3 bg-zinc-900 border border-zinc-800 rounded-2xl transition-colors active:bg-zinc-800"><ChevronLeft size={20}/></button>
-            <button onClick={() => setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1))} className="p-3 bg-zinc-900 border border-zinc-800 rounded-2xl transition-colors active:bg-zinc-800"><ChevronRight size={20}/></button>
-          </div>
+      <div className="p-4 pt-10 pb-32 space-y-8 animate-in fade-in duration-500">
+        <header className="px-2">
+          <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white">Evolução</h2>
+          <p className="text-zinc-400 text-sm font-medium mt-1">Seu histórico de alta performance</p>
         </header>
 
-        {/* CALENDÁRIO */}
-        <section className="bg-zinc-900 border border-zinc-800 rounded-[2.5rem] p-6 shadow-xl">
-          <h3 className="text-xs font-black uppercase italic text-blue-500 mb-6 text-center tracking-widest">
-            {format(currentMonth, 'MMMM yyyy', { locale: ptBR })}
-          </h3>
-          
-          <div className="grid grid-cols-7 gap-2">
-            {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((d, i) => (
-              <div key={`${d}-${i}`} className="text-center text-[10px] font-black text-zinc-600 pb-2">{d}</div>
-            ))}
-            {monthDays.map((day, i) => {
-              const daySessions = getSessionsForDay(day);
-              const hasWorkout = daySessions.length > 0;
-              const isCurrentMonth = day.getMonth() === currentMonth.getMonth();
-              
-              return (
-                <button
-                  key={i}
-                  disabled={!hasWorkout && isCurrentMonth}
-                  onClick={() => hasWorkout && setSelectedDay(day)}
-                  className={`aspect-square rounded-full flex items-center justify-center text-xs font-black transition-all relative
-                    ${!isCurrentMonth ? 'opacity-20' : 'opacity-100'}
-                    ${hasWorkout ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'text-zinc-500 hover:bg-zinc-900'}
-                  `}
-                >
-                  {format(day, 'd')}
-                  {daySessions.length > 1 && (
-                    <div className="absolute top-0 right-0 w-2 h-2 bg-white rounded-full border border-blue-600" />
-                  )}
-                </button>
-              );
-            })}
+        {/* 1. CARDS DE RECORDES PESSOAIS (PRs) */}
+        <section>
+          <div className="flex items-center gap-2 mb-4 px-2">
+            <Trophy className="text-yellow-500" size={20} />
+            <h3 className="text-xs font-black text-zinc-400 uppercase tracking-widest">Recordes Pessoais</h3>
           </div>
-        </section>
-
-        {/* EVOLUÇÃO POR EXERCÍCIO */}
-        <section className="space-y-4">
-          <div className="flex justify-between items-center ml-2">
-            <div className="flex items-center gap-2">
-              <TrendingUp size={16} className="text-green-500" />
-              <h3 className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Carga por Exercício</h3>
-            </div>
-            <select 
-              value={selectedExerciseId}
-              onChange={(e) => setSelectedExerciseId(e.target.value)}
-              className="bg-zinc-900 border border-zinc-800 rounded-lg text-[10px] font-black uppercase tracking-widest py-1 px-3 text-white outline-none"
-            >
-              {state.exercises.map((ex: any) => (
-                <option key={ex.id} value={ex.id}>{ex.name}</option>
-              ))}
-            </select>
-          </div>
-          <div className="h-56 w-full bg-zinc-900 border border-zinc-800 rounded-[2rem] p-5">
-            {exerciseEvolutionData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={exerciseEvolutionData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#18181b" vertical={false} />
-                  <XAxis dataKey="date" stroke="#3f3f46" fontSize={10} axisLine={false} tickLine={false} hide />
-                  <YAxis stroke="#3f3f46" fontSize={10} axisLine={false} tickLine={false} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#000', border: '1px solid #333', borderRadius: '12px' }}
-                    itemStyle={{ color: '#10b981', fontWeight: 'bold', fontSize: '12px' }}
-                  />
-                  <Line type="monotone" dataKey="load" stroke="#10b981" strokeWidth={3} dot={{ fill: '#10b981' }} activeDot={{ r: 6 }} />
-                </LineChart>
-              </ResponsiveContainer>
+          <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide px-2">
+            {personalRecords.length > 0 ? (
+              personalRecords.map((pr, idx) => (
+                <div key={idx} className="snap-center shrink-0 w-48 bg-zinc-900 border border-zinc-800 rounded-3xl p-5 shadow-xl flex flex-col justify-between relative overflow-hidden group">
+                  <div className="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <Trophy size={80} />
+                  </div>
+                  <h4 className="text-sm font-bold text-zinc-400 uppercase line-clamp-2 mb-4">{pr.name}</h4>
+                  <div className="flex items-end gap-1">
+                    <span className="text-3xl font-black italic text-white">{pr.load}</span>
+                    <span className="text-xs font-bold text-zinc-500 mb-1">kg</span>
+                  </div>
+                </div>
+              ))
             ) : (
-              <div className="h-full flex items-center justify-center text-zinc-700 italic text-sm text-center px-6">
-                Sem histórico disponível.
+              <div className="w-full bg-zinc-900 border border-zinc-800 rounded-3xl p-5 text-center text-zinc-500 italic text-sm">
+                Nenhum recorde registrado ainda.
               </div>
             )}
           </div>
         </section>
 
-        {/* VOLUME GERAL */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-2 ml-2">
-            <Activity size={16} className="text-blue-500" />
-            <h3 className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Volume Semanal</h3>
+        {/* 2. GRÁFICO DE RADAR (EQUILÍBRIO MUSCULAR) */}
+        <section className="px-2">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl h-80 flex flex-col">
+            <div className="flex items-center gap-2 mb-2">
+              <Target className="text-emerald-500" size={20} />
+              <h3 className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Equilíbrio Muscular</h3>
+            </div>
+            <div className="flex-1 -mx-6">
+              {muscleBalance.length > 2 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <RadarChart cx="50%" cy="50%" outerRadius="70%" data={muscleBalance}>
+                    <PolarGrid stroke="#27272a" />
+                    <PolarAngleAxis dataKey="subject" tick={{ fill: '#a1a1aa', fontSize: 10, fontWeight: 'bold' }} />
+                    <PolarRadiusAxis angle={30} domain={[0, 'dataMax']} tick={false} axisLine={false} />
+                    <Radar name="Frequência" dataKey="A" stroke="#3b82f6" fill="transparent" strokeWidth={2} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '12px' }}
+                      itemStyle={{ color: '#3b82f6', fontWeight: 'bold' }}
+                    />
+                  </RadarChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-full flex items-center justify-center text-zinc-700 italic text-sm text-center px-4">
+                  Treine mais grupos musculares para gerar o radar de equilíbrio.
+                </div>
+              )}
+            </div>
           </div>
-          <div className="h-56 w-full bg-zinc-900 border border-zinc-800 rounded-[2rem] p-5">
-            {volumeChartData.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={volumeChartData}>
-                  <Bar dataKey="volume" fill="#3b82f6" radius={[6, 6, 0, 0]} />
-                  <XAxis dataKey="date" stroke="#3f3f46" fontSize={10} axisLine={false} tickLine={false} hide />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#000', border: '1px solid #333', borderRadius: '12px' }}
-                    itemStyle={{ color: '#3b82f6', fontWeight: 'bold', fontSize: '12px' }}
-                  />
-                </BarChart>
-              </ResponsiveContainer>
+        </section>
+
+        {/* 3. COMPARATIVO DE VOLUME SEMANAL */}
+        <section className="px-2">
+          <div className="bg-gradient-to-br from-blue-900/40 to-zinc-900 border border-blue-500/20 rounded-3xl p-6 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-6 opacity-20">
+              <Activity size={64} className="text-blue-500" />
+            </div>
+            <h3 className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-2">Volume Semanal</h3>
+            <div className="flex items-end gap-2 mb-2">
+              <span className="text-4xl font-black italic text-white">{weeklyComparison.currentWeekVolume}</span>
+              <span className="text-sm font-bold text-zinc-400 mb-1">kg</span>
+            </div>
+            
+            <div className="flex items-center gap-2 mt-4">
+              <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-black ${weeklyComparison.percentageChange >= 0 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                {weeklyComparison.percentageChange >= 0 ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
+                {weeklyComparison.percentageChange >= 0 ? '+' : ''}{weeklyComparison.percentageChange}% Volume
+              </div>
+              <span className="text-xs text-zinc-500 font-medium">vs. semana anterior</span>
+            </div>
+          </div>
+        </section>
+
+        {/* CALENDÁRIO DE CONSISTÊNCIA */}
+        <section className="px-2">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] text-center w-full">Calendário de Consistência</h3>
+            </div>
+            <div className="flex justify-between items-center mb-4">
+              <button onClick={() => setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() - 1))} className="p-2 text-zinc-500 hover:text-white transition-colors"><ChevronLeft size={16}/></button>
+              <span className="text-xs font-black uppercase italic text-blue-500 tracking-widest">
+                {format(currentMonth, 'MMMM yyyy', { locale: ptBR })}
+              </span>
+              <button onClick={() => setCurrentMonth(prev => new Date(prev.getFullYear(), prev.getMonth() + 1))} className="p-2 text-zinc-500 hover:text-white transition-colors"><ChevronRight size={16}/></button>
+            </div>
+            
+            <div className="grid grid-cols-7 gap-2">
+              {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((d, i) => (
+                <div key={`${d}-${i}`} className="text-center text-[10px] font-black text-zinc-600 pb-2">{d}</div>
+              ))}
+              {monthDays.map((day, i) => {
+                const daySessions = getSessionsForDay(day);
+                const hasWorkout = daySessions.length > 0;
+                const isCurrentMonth = day.getMonth() === currentMonth.getMonth();
+                
+                return (
+                  <button
+                    key={i}
+                    disabled={!hasWorkout && isCurrentMonth}
+                    onClick={() => hasWorkout && setSelectedDay(day)}
+                    className={`aspect-square rounded-full flex items-center justify-center text-xs font-black transition-all relative
+                      ${!isCurrentMonth ? 'opacity-20' : 'opacity-100'}
+                      ${hasWorkout ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'text-zinc-500 hover:bg-zinc-800'}
+                    `}
+                  >
+                    {format(day, 'd')}
+                    {daySessions.length > 1 && (
+                      <div className="absolute top-0 right-0 w-2 h-2 bg-white rounded-full border border-blue-600" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* HISTÓRICO RECENTE */}
+        <section className="px-2 space-y-4">
+          <div className="flex items-center gap-2 mb-4">
+            <Clock size={20} className="text-zinc-500" />
+            <h3 className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Histórico Recente</h3>
+          </div>
+          <div className="space-y-4">
+            {recentSessions.length > 0 ? (
+              recentSessions.map((session: any, idx: number) => (
+                <SessionAccordion 
+                  key={session.id} 
+                  session={session} 
+                  index={idx} 
+                  onDelete={handleDeleteSession} 
+                />
+              ))
             ) : (
-              <div className="h-full flex items-center justify-center text-zinc-700 italic text-sm">Nenhum volume registrado.</div>
+              <p className="text-center py-10 text-zinc-600 italic text-sm">Nenhum treino registrado.</p>
             )}
           </div>
         </section>
@@ -292,3 +400,4 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
     </div>
   );
 };
+

@@ -2,8 +2,7 @@
 import React, { useMemo } from 'react';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import { Trophy, Activity, Target, TrendingUp, TrendingDown } from 'lucide-react';
-import { Session } from '../types';
-import { MASTER_EXERCISES } from '../constants';
+import { Session, WorkoutHistory, Exercise } from '../types';
 
 export const ProgressScreen: React.FC<{ app: any }> = ({ app }) => {
   const now = new Date();
@@ -20,36 +19,39 @@ export const ProgressScreen: React.FC<{ app: any }> = ({ app }) => {
   // 1. CARDS DE RECORDES PESSOAIS (PRs)
   const personalRecords = useMemo(() => {
     const prs: Record<string, number> = {};
-    app.state.sessions.forEach((session: Session) => {
-      session.details.forEach(detail => {
-        if (detail.type === 'strength' || !detail.type) {
-          detail.series.forEach(s => {
-            if (!prs[detail.exerciseName] || s.load > prs[detail.exerciseName]) {
-              prs[detail.exerciseName] = s.load;
-            }
-          });
-        }
-      });
+    
+    app.state.history.forEach((h: WorkoutHistory) => {
+      if (!prs[h.exerciseName] || h.load > prs[h.exerciseName]) {
+        prs[h.exerciseName] = h.load;
+      }
     });
     
+    const targetExercises = ["Supino", "Agachamento", "Levantamento Terra", "Deadlift", "Squat", "Bench Press"];
+    
+    // Ordena pelo maior peso e pega os 3 primeiros, priorizando os targetExercises
     return Object.entries(prs)
       .map(([name, load]) => ({ name, load }))
-      .sort((a, b) => b.load - a.load)
+      .sort((a, b) => {
+        const aIsTarget = targetExercises.some(t => a.name.toLowerCase().includes(t.toLowerCase()));
+        const bIsTarget = targetExercises.some(t => b.name.toLowerCase().includes(t.toLowerCase()));
+        if (aIsTarget && !bIsTarget) return -1;
+        if (!aIsTarget && bIsTarget) return 1;
+        return b.load - a.load;
+      })
       .slice(0, 3);
-  }, [app.state.sessions]);
+  }, [app.state.history]);
 
   // 2. GRÁFICO DE RADAR (EQUILÍBRIO MUSCULAR)
   const muscleBalance = useMemo(() => {
     const counts: Record<string, number> = {};
-    app.state.sessions.forEach((session: Session) => {
-      session.details.forEach(detail => {
-        const masterEx = MASTER_EXERCISES.find(m => m.name === detail.exerciseName);
-        if (masterEx && masterEx.targetMuscles) {
-          masterEx.targetMuscles.forEach(muscle => {
-            counts[muscle] = (counts[muscle] || 0) + 1;
-          });
-        }
-      });
+    
+    app.state.history.forEach((h: WorkoutHistory) => {
+      const exercise = app.state.exercises.find((e: Exercise) => e.id === h.exerciseId);
+      if (exercise && exercise.targetMuscles) {
+        exercise.targetMuscles.forEach(muscle => {
+          counts[muscle] = (counts[muscle] || 0) + 1;
+        });
+      }
     });
     
     return Object.entries(counts).map(([muscle, count]) => ({
@@ -57,7 +59,7 @@ export const ProgressScreen: React.FC<{ app: any }> = ({ app }) => {
       A: count,
       fullMark: Math.max(...Object.values(counts), 10)
     }));
-  }, [app.state.sessions]);
+  }, [app.state.history, app.state.exercises]);
 
   // 3. COMPARATIVO DE VOLUME SEMANAL
   const weeklyComparison = useMemo(() => {
@@ -68,15 +70,16 @@ export const ProgressScreen: React.FC<{ app: any }> = ({ app }) => {
     let currentWeekVolume = 0;
     let previousWeekVolume = 0;
 
-    app.state.sessions.forEach((session: Session) => {
-      const sessionDate = new Date(session.date).getTime();
-      // Ajuste de fuso horário simples
-      const adjustedSessionDate = sessionDate + new Date(sessionDate).getTimezoneOffset() * 60000;
+    app.state.history.forEach((h: WorkoutHistory) => {
+      const historyDate = new Date(h.date).getTime();
+      const adjustedHistoryDate = historyDate + new Date(historyDate).getTimezoneOffset() * 60000;
       
-      if (adjustedSessionDate >= sevenDaysAgo && adjustedSessionDate <= today) {
-        currentWeekVolume += session.volume;
-      } else if (adjustedSessionDate >= fourteenDaysAgo && adjustedSessionDate < sevenDaysAgo) {
-        previousWeekVolume += session.volume;
+      const volume = h.load * h.reps * h.sets;
+
+      if (adjustedHistoryDate >= sevenDaysAgo && adjustedHistoryDate <= today) {
+        currentWeekVolume += volume;
+      } else if (adjustedHistoryDate >= fourteenDaysAgo && adjustedHistoryDate < sevenDaysAgo) {
+        previousWeekVolume += volume;
       }
     });
 
@@ -92,7 +95,7 @@ export const ProgressScreen: React.FC<{ app: any }> = ({ app }) => {
       previousWeekVolume,
       percentageChange: Math.round(percentageChange)
     };
-  }, [app.state.sessions]);
+  }, [app.state.history]);
 
   // Volume Data for Chart
   const volumeData = useMemo(() => {
@@ -164,39 +167,9 @@ export const ProgressScreen: React.FC<{ app: any }> = ({ app }) => {
           <div className="flex items-center gap-2 mt-4">
             <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-black ${weeklyComparison.percentageChange >= 0 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
               {weeklyComparison.percentageChange >= 0 ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
-              {weeklyComparison.percentageChange >= 0 ? '+' : ''}{weeklyComparison.percentageChange}%
+              {weeklyComparison.percentageChange >= 0 ? '+' : ''}{weeklyComparison.percentageChange}% Volume
             </div>
             <span className="text-xs text-zinc-500 font-medium">vs. semana anterior</span>
-          </div>
-        </div>
-      </section>
-
-      {/* 2. GRÁFICO DE RADAR (EQUILÍBRIO MUSCULAR) */}
-      <section className="px-2">
-        <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl h-80 flex flex-col">
-          <div className="flex items-center gap-2 mb-2">
-            <Target className="text-emerald-500" size={20} />
-            <h3 className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Equilíbrio Muscular</h3>
-          </div>
-          <div className="flex-1 -mx-6">
-            {muscleBalance.length > 2 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <RadarChart cx="50%" cy="50%" outerRadius="70%" data={muscleBalance}>
-                  <PolarGrid stroke="#27272a" />
-                  <PolarAngleAxis dataKey="subject" tick={{ fill: '#a1a1aa', fontSize: 10, fontWeight: 'bold' }} />
-                  <PolarRadiusAxis angle={30} domain={[0, 'dataMax']} tick={false} axisLine={false} />
-                  <Radar name="Frequência" dataKey="A" stroke="#10b981" fill="#10b981" fillOpacity={0.3} />
-                  <Tooltip 
-                    contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '12px' }}
-                    itemStyle={{ color: '#10b981', fontWeight: 'bold' }}
-                  />
-                </RadarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="h-full flex items-center justify-center text-zinc-700 italic text-sm text-center px-4">
-                Treine mais grupos musculares para gerar o radar de equilíbrio.
-              </div>
-            )}
           </div>
         </div>
       </section>
@@ -268,6 +241,36 @@ export const ProgressScreen: React.FC<{ app: any }> = ({ app }) => {
               </ResponsiveContainer>
             ) : (
               <div className="h-full flex items-center justify-center text-zinc-700 italic text-sm">Finalize seu primeiro treino!</div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* 2. GRÁFICO DE RADAR (EQUILÍBRIO MUSCULAR) */}
+      <section className="px-2">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl h-80 flex flex-col">
+          <div className="flex items-center gap-2 mb-2">
+            <Target className="text-emerald-500" size={20} />
+            <h3 className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Equilíbrio Muscular</h3>
+          </div>
+          <div className="flex-1 -mx-6">
+            {muscleBalance.length > 2 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart cx="50%" cy="50%" outerRadius="70%" data={muscleBalance}>
+                  <PolarGrid stroke="#27272a" />
+                  <PolarAngleAxis dataKey="subject" tick={{ fill: '#a1a1aa', fontSize: 10, fontWeight: 'bold' }} />
+                  <PolarRadiusAxis angle={30} domain={[0, 'dataMax']} tick={false} axisLine={false} />
+                  <Radar name="Frequência" dataKey="A" stroke="#3b82f6" fill="transparent" strokeWidth={2} />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '12px' }}
+                    itemStyle={{ color: '#3b82f6', fontWeight: 'bold' }}
+                  />
+                </RadarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-full flex items-center justify-center text-zinc-700 italic text-sm text-center px-4">
+                Treine mais grupos musculares para gerar o radar de equilíbrio.
+              </div>
             )}
           </div>
         </div>
