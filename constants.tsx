@@ -363,8 +363,31 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "name": "Abdominal Remador",
     "targetMuscles": ["Abdominal"],
     "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2017/09/abdominal-remador.gif"
-  }
-  
+  },
+  {
+    "id": "custom_ex_96",
+    "name": "Leg Press horizontal",
+    "targetMuscles": ["Quadríceps", "Glúteo", "Panturrilha"],
+    "gifUrl": "https://fitnessprogramer.com/wp-content/uploads/2021/08/Lever-Horizontal-Leg-Press.gif"
+  },
+  {
+    "id": "custom_ex_97",
+    "name": "Agachamento Búlgaro",
+    "targetMuscles": ["Quadríceps", "Glúteo", "Posterior"],
+    "gifUrl": "https://image.tuasaude.com/media/article/dv/bw/agachamento-bulgaro_62764.gif"
+  },
+  {
+    "id": "custom_ex_98",
+    "name": "Glúteo 4 apoios",
+    "targetMuscles": ["Glúteo", "Posterior"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/09/quatro-apoios-com-elevacao-da-perna.gif"
+  },
+  {
+    "id": "custom_ex_99",
+    "name": "Glúteo 4 apoios",
+    "targetMuscles": ["Glúteo", "Posterior"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/09/quatro-apoios-com-elevacao-da-perna.gif"
+  },
 ];
 
 
