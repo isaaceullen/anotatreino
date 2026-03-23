@@ -114,13 +114,17 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
   const personalRecords = useMemo(() => {
     const prs: Record<string, number> = {};
     
-    (state.history || []).forEach((h: WorkoutHistory) => {
-      if (!prs[h.exerciseName] || h.load > prs[h.exerciseName]) {
-        prs[h.exerciseName] = h.load;
-      }
+    (state.sessions || []).forEach((session: any) => {
+      (session.details || []).forEach((detail: any) => {
+        (detail.series || []).forEach((series: any) => {
+          if (!prs[detail.exerciseName] || series.load > prs[detail.exerciseName]) {
+            prs[detail.exerciseName] = series.load;
+          }
+        });
+      });
     });
     
-    const targetExercises = ["Supino", "Agachamento", "Leg Press", "Levantamento Terra", "Deadlift", "Squat", "Bench Press"];
+    const targetExercises = ["Supino", "Agachamento", "Leg Press", "Puxador", "Levantamento Terra", "Deadlift", "Squat", "Bench Press"];
     
     return Object.entries(prs)
       .map(([name, load]) => ({ name, load }))
@@ -132,19 +136,21 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
         return b.load - a.load;
       })
       .slice(0, 3);
-  }, [state.history]);
+  }, [state.sessions]);
 
   // 2. GRÁFICO DE RADAR (EQUILÍBRIO MUSCULAR)
   const muscleBalance = useMemo(() => {
     const counts: Record<string, number> = {};
     
-    (state.history || []).forEach((h: WorkoutHistory) => {
-      const exercise = (state.exercises || []).find((e: any) => e.id === h.exerciseId);
-      if (exercise && exercise.targetMuscles) {
-        exercise.targetMuscles.forEach((muscle: string) => {
-          counts[muscle] = (counts[muscle] || 0) + 1;
-        });
-      }
+    (state.sessions || []).forEach((session: any) => {
+      (session.details || []).forEach((detail: any) => {
+        const exercise = (state.exercises || []).find((e: any) => e.id === detail.exerciseId);
+        if (exercise && exercise.targetMuscles) {
+          exercise.targetMuscles.forEach((muscle: string) => {
+            counts[muscle] = (counts[muscle] || 0) + 1;
+          });
+        }
+      });
     });
     
     return Object.entries(counts).map(([muscle, count]) => ({
@@ -152,7 +158,7 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
       A: count,
       fullMark: Math.max(...Object.values(counts), 10)
     }));
-  }, [state.history, state.exercises]);
+  }, [state.sessions, state.exercises]);
 
   // 3. COMPARATIVO DE VOLUME SEMANAL
   const weeklyComparison = useMemo(() => {
@@ -164,15 +170,15 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
     let currentWeekVolume = 0;
     let previousWeekVolume = 0;
 
-    (state.history || []).forEach((h: WorkoutHistory) => {
-      const historyDate = new Date(h.date).getTime();
-      const adjustedHistoryDate = historyDate + new Date(historyDate).getTimezoneOffset() * 60000;
+    (state.sessions || []).forEach((session: any) => {
+      const sessionDate = new Date(session.date).getTime();
+      const adjustedSessionDate = sessionDate + new Date(sessionDate).getTimezoneOffset() * 60000;
       
-      const volume = h.load * h.reps * h.sets;
+      const volume = session.volume || 0;
 
-      if (adjustedHistoryDate >= sevenDaysAgo && adjustedHistoryDate <= today) {
+      if (adjustedSessionDate >= sevenDaysAgo && adjustedSessionDate <= today) {
         currentWeekVolume += volume;
-      } else if (adjustedHistoryDate >= fourteenDaysAgo && adjustedHistoryDate < sevenDaysAgo) {
+      } else if (adjustedSessionDate >= fourteenDaysAgo && adjustedSessionDate < sevenDaysAgo) {
         previousWeekVolume += volume;
       }
     });
@@ -189,7 +195,7 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
       previousWeekVolume,
       percentageChange: Math.round(percentageChange)
     };
-  }, [state.history]);
+  }, [state.sessions]);
 
   const recentSessions = useMemo(() => {
     return [...(state.sessions || [])]
