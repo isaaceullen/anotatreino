@@ -84,7 +84,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   },
   {
     "id": "custom_ex_48",
-    "name": "Stiff",
+    "name": "Stiff com Barra",
     "targetMuscles": ["Perna", "Posterior"],
     "gifUrl": "https://static.wixstatic.com/media/2edbed_5cd71a451e8f4210b1c1538ea54c03b6~mv2.gif"
   },
@@ -388,6 +388,18 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "targetMuscles": ["Glúteo", "Posterior"],
     "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2021/09/quatro-apoios-com-elevacao-da-perna.gif"
   },
+  {
+    "id": "custom_ex_100",
+    "name": "Agachamento afundo no smith",
+    "targetMuscles": ["Perna", "Quadríceps", "Glúteo"],
+    "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/12/agachamento-afundo-no-smith-machine.gif"
+  },
+  {
+    "id": "custom_ex_101",
+    "name": "Agachamento sumô",
+    "targetMuscles": ["Perna", "Quadríceps", "Glúteo"],
+    "gifUrl": "https://image.tuasaude.com/media/article/qu/vm/agachamento-sumo_75036.gif"
+  }
 ];
 
 
