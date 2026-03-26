@@ -12,13 +12,13 @@
   "scope": "/",
   "icons": [
     {
-      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADAAQMAAABFw8ZMAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAACZJREFUaN7twTEBAAAAwiD7p7bGDmAAAAAAAAAAAAAAAAAAAAAkHwAEAAExH/1nAAAAAElFTkSuQmCC",
+      "src": "https://picsum.photos/192/192",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIAAQMAAADOtka5AAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAFRJREFUeNrtwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8GwgAAAEVvO1qAAAAAElFTkSuQmCC",
+      "src": "https://picsum.photos/512/512",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

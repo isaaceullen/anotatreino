@@ -11,6 +11,7 @@ import {
   startOfWeek 
 } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import { ChevronLeft, ChevronRight, X, Clock, Dumbbell, Activity, TrendingUp, TrendingDown, Trash2, ChevronDown, ChevronUp, Trophy, Target } from 'lucide-react';
 import { WorkoutHistory } from '../types';
 
@@ -254,24 +255,18 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
             </div>
             <div className="flex-1 -mx-6">
               {muscleBalance.length > 2 ? (
-                <div className="h-full flex flex-col justify-center px-6 gap-3">
-                  {muscleBalance.map((item: any, i: number) => {
-                    const maxA = Math.max(...muscleBalance.map((m: any) => m.A));
-                    const percentage = maxA > 0 ? (item.A / maxA) * 100 : 0;
-                    return (
-                      <div key={i} className="flex items-center gap-3">
-                        <span className="text-[10px] font-black text-zinc-400 uppercase w-16 text-right truncate">{item.subject}</span>
-                        <div className="flex-1 h-2 bg-zinc-800 rounded-full overflow-hidden">
-                          <div 
-                            className="h-full bg-blue-500 rounded-full" 
-                            style={{ width: `${percentage}%` }}
-                          />
-                        </div>
-                        <span className="text-[10px] font-black text-blue-500 w-6">{item.A}x</span>
-                      </div>
-                    );
-                  })}
-                </div>
+                <ResponsiveContainer width="100%" height="100%">
+                  <RadarChart cx="50%" cy="50%" outerRadius="70%" data={muscleBalance}>
+                    <PolarGrid stroke="#27272a" />
+                    <PolarAngleAxis dataKey="subject" tick={{ fill: '#a1a1aa', fontSize: 10, fontWeight: 'bold' }} />
+                    <PolarRadiusAxis angle={30} domain={[0, 'dataMax']} tick={false} axisLine={false} />
+                    <Radar name="Frequência" dataKey="A" stroke="#3b82f6" fill="transparent" strokeWidth={2} />
+                    <Tooltip 
+                      contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '12px' }}
+                      itemStyle={{ color: '#3b82f6', fontWeight: 'bold' }}
+                    />
+                  </RadarChart>
+                </ResponsiveContainer>
               ) : (
                 <div className="h-full flex items-center justify-center text-zinc-700 italic text-sm text-center px-4">
                   Treine mais grupos musculares para gerar o radar de equilíbrio.
