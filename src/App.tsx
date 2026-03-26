@@ -1,19 +1,13 @@
 
-import React, { useState, Suspense, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Home, Dumbbell, Calendar, Settings as SettingsIcon } from 'lucide-react';
 import { useWorkoutManager } from './hooks/useWorkoutManager';
 import { HomeScreen } from './screens/HomeScreen';
 import { ActiveWorkoutScreen } from './screens/ActiveWorkoutScreen';
 import { HistoryScreen } from './screens/HistoryScreen';
 import { ConfigScreen } from './screens/ConfigScreen';
+import { ExercisesScreen } from './screens/ExercisesScreen';
 import { CustomDialog } from './components/CustomDialog';
-import { LoadingSpinner } from './components/LoadingSpinner';
-
-// Lazy Load da tela pesada (Acervo/Exercícios)
-// O .then manipula o módulo pois ExercisesScreen usa exportação nomeada (named export), não default.
-const ExercisesScreen = React.lazy(() => 
-  import('./screens/ExercisesScreen').then(module => ({ default: module.ExercisesScreen }))
-);
 
 type Screen = 'home' | 'exercises' | 'history' | 'settings';
 
@@ -70,9 +64,7 @@ const App: React.FC = () => {
     // Ao mudar de aba, ele é desmontado, interrompendo o carregamento de GIFs.
     if (activeTab === 'exercises') {
       return (
-        <Suspense fallback={<LoadingSpinner />}>
-          <ExercisesScreen manager={workoutManager} />
-        </Suspense>
+        <ExercisesScreen manager={workoutManager} />
       );
     }
 

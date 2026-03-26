@@ -1,13 +1,9 @@
 
-const CACHE_NAME = 'treino-v5';
+const CACHE_NAME = 'treino-v6';
 const ASSETS = [
   '/',
   '/index.html',
-  '/manifest.json',
-  '/index.css',
-  'https://cdn.tailwindcss.com',
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap',
-  'https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2'
+  '/manifest.json'
 ];
 
 self.addEventListener('install', (event) => {
