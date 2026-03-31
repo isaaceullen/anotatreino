@@ -93,6 +93,79 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
   const { state, removeSession, showDialog } = manager;
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+  const [selectedExercise, setSelectedExercise] = useState<string>('');
+
+  const allExercises = useMemo(() => {
+    const names = new Set<string>();
+    (state.sessions || []).forEach((session: any) => {
+      (session.details || []).forEach((detail: any) => {
+        if (detail.type === 'strength') {
+          names.add(detail.exerciseName);
+        }
+      });
+    });
+    return Array.from(names).sort();
+  }, [state.sessions]);
+
+  const exerciseStats = useMemo(() => {
+    if (!selectedExercise) return null;
+
+    const history: { date: string; maxLoad: number; sessionDate: Date }[] = [];
+    const sortedSessions = [...(state.sessions || [])].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+    sortedSessions.forEach((session: any) => {
+      const detail = (session.details || []).find((d: any) => d.exerciseName === selectedExercise);
+      if (detail && detail.type === 'strength' && detail.series && detail.series.length > 0) {
+        const maxLoad = Math.max(...detail.series.map((s: any) => s.load));
+        history.push({
+          date: format(parseISO(session.date), 'dd/MM'),
+          sessionDate: parseISO(session.date),
+          maxLoad
+        });
+      }
+    });
+
+    if (history.length === 0) return null;
+
+    let progressionKPI = { diff: 0, percentage: 0, isPositive: true };
+    if (history.length >= 2) {
+      const last = history[history.length - 1].maxLoad;
+      const prev = history[history.length - 2].maxLoad;
+      const diff = last - prev;
+      progressionKPI = {
+        diff,
+        percentage: prev > 0 ? (diff / prev) * 100 : 0,
+        isPositive: diff >= 0
+      };
+    }
+
+    let plateauCount = 0;
+    if (history.length > 0) {
+      const lastLoad = history[history.length - 1].maxLoad;
+      for (let i = history.length - 1; i >= 0; i--) {
+        if (history[i].maxLoad === lastLoad) {
+          plateauCount++;
+        } else {
+          break;
+        }
+      }
+    }
+
+    let maxJump = { diff: 0, date: '' };
+    for (let i = 1; i < history.length; i++) {
+      const diff = history[i].maxLoad - history[i - 1].maxLoad;
+      if (diff > maxJump.diff) {
+        maxJump = { diff, date: history[i].date };
+      }
+    }
+
+    return {
+      history,
+      progressionKPI,
+      plateauCount,
+      maxJump
+    };
+  }, [selectedExercise, state.sessions]);
 
   const monthDays = useMemo(() => {
     return eachDayOfInterval({
@@ -217,6 +290,125 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
           <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white">Evolução</h2>
           <p className="text-zinc-400 text-sm font-medium mt-1">Seu histórico de alta performance</p>
         </header>
+
+        {/* DETALHAMENTO POR EXERCÍCIO */}
+        <section className="px-2">
+          <div className="flex items-center gap-2 mb-4">
+            <Dumbbell className="text-blue-500" size={20} />
+            <h3 className="text-xs font-black text-zinc-400 uppercase tracking-widest">Evolução por Exercício</h3>
+          </div>
+          
+          <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl">
+            {/* Seletor */}
+            <div className="mb-6 relative">
+              <select 
+                className="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-2xl px-4 py-3 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold italic"
+                value={selectedExercise}
+                onChange={(e) => setSelectedExercise(e.target.value)}
+              >
+                <option value="">Selecione um exercício...</option>
+                {allExercises.map(ex => (
+                  <option key={ex} value={ex}>{ex}</option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={18} />
+            </div>
+
+            {/* Dashboard */}
+            {selectedExercise && exerciseStats && (
+              <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                
+                {/* KPIs */}
+                <div className="grid grid-cols-2 gap-3">
+                  {/* KPI Progressão */}
+                  <div className="bg-black/40 border border-zinc-800/50 rounded-2xl p-4 flex flex-col justify-between">
+                    <p className="text-[9px] font-black text-zinc-500 uppercase tracking-widest mb-2">Último Treino</p>
+                    {exerciseStats.history.length >= 2 ? (
+                      <div className="flex items-end gap-2">
+                        <span className="text-2xl font-black italic text-white">{exerciseStats.history[exerciseStats.history.length - 1].maxLoad}kg</span>
+                        <div className={`flex items-center text-xs font-bold mb-1 ${exerciseStats.progressionKPI.diff > 0 ? 'text-green-500' : exerciseStats.progressionKPI.diff < 0 ? 'text-red-500' : 'text-zinc-500'}`}>
+                          {exerciseStats.progressionKPI.diff > 0 ? <TrendingUp size={14} className="mr-0.5" /> : exerciseStats.progressionKPI.diff < 0 ? <TrendingDown size={14} className="mr-0.5" /> : null}
+                          {exerciseStats.progressionKPI.diff > 0 ? '+' : ''}{exerciseStats.progressionKPI.diff}kg
+                        </div>
+                      </div>
+                    ) : (
+                      <span className="text-2xl font-black italic text-white">{exerciseStats.history[0]?.maxLoad}kg</span>
+                    )}
+                  </div>
+
+                  {/* Platô */}
+                  <div className="bg-black/40 border border-zinc-800/50 rounded-2xl p-4 flex flex-col justify-between">
+                    <p className="text-[9px] font-black text-zinc-500 uppercase tracking-widest mb-2">Análise de Platô</p>
+                    <p className="text-sm font-bold text-zinc-300">
+                      Carga estável por <span className="text-blue-500 font-black">{exerciseStats.plateauCount}</span> {exerciseStats.plateauCount === 1 ? 'treino' : 'treinos'}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Maior Evolução */}
+                {exerciseStats.maxJump.diff > 0 && (
+                  <div className="bg-blue-900/20 border border-blue-500/20 rounded-2xl p-4 flex items-center gap-3">
+                    <div className="bg-blue-500/20 p-2 rounded-xl text-blue-400 shrink-0">
+                      <Trophy size={20} />
+                    </div>
+                    <div>
+                      <p className="text-[9px] font-black text-blue-400/80 uppercase tracking-widest mb-0.5">Maior Salto de Carga</p>
+                      <p className="text-sm font-bold text-blue-100">
+                        <span className="text-blue-400 font-black">+{exerciseStats.maxJump.diff}kg</span> em {exerciseStats.maxJump.date}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Gráfico */}
+                <div className="h-48 mt-4">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={exerciseStats.history}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                      <XAxis 
+                        dataKey="date" 
+                        stroke="#52525b" 
+                        fontSize={10} 
+                        tickLine={false} 
+                        axisLine={false} 
+                        dy={10}
+                      />
+                      <YAxis 
+                        stroke="#52525b" 
+                        fontSize={10} 
+                        tickLine={false} 
+                        axisLine={false} 
+                        dx={-10}
+                        domain={['dataMin - 5', 'dataMax + 5']}
+                      />
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '12px' }}
+                        itemStyle={{ color: '#3b82f6', fontWeight: 'bold' }}
+                        labelStyle={{ color: '#a1a1aa', marginBottom: '4px', fontSize: '12px' }}
+                        formatter={(value: number) => [`${value} kg`, 'Carga Máx']}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="maxLoad" 
+                        stroke="#3b82f6" 
+                        strokeWidth={3}
+                        dot={{ fill: '#18181b', stroke: '#3b82f6', strokeWidth: 2, r: 4 }}
+                        activeDot={{ r: 6, fill: '#3b82f6', stroke: '#fff' }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
+
+              </div>
+            )}
+            
+            {!selectedExercise && (
+              <div className="text-center py-8 text-zinc-600 italic text-sm">
+                Selecione um exercício acima para ver seu detalhamento.
+              </div>
+            )}
+          </div>
+        </section>
 
         {/* 1. CARDS DE RECORDES PESSOAIS (PRs) */}
         <section>
