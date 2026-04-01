@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from 'react';
 import { format, parseISO } from 'date-fns';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, CartesianGrid } from 'recharts';
-import { Trophy, Activity, Target, TrendingUp, TrendingDown, Dumbbell, ChevronDown } from 'lucide-react';
+import { Trophy, Activity, Target, TrendingUp, TrendingDown, Dumbbell, ChevronDown, Search, X } from 'lucide-react';
 import { Session, WorkoutHistory, Exercise } from '../types';
 
 export const ProgressScreen: React.FC<{ app: any }> = ({ app }) => {
@@ -14,18 +14,29 @@ export const ProgressScreen: React.FC<{ app: any }> = ({ app }) => {
   const firstDay = new Date(year, month, 1).getDay();
 
   const loggedDays = useMemo(() => {
-    return app.state.sessions.map((s: Session) => s.date);
+    return app.state.sessions.map((s: Session) => {
+      return format(new Date(s.date + 'T00:00:00'), 'yyyy-MM-dd');
+    });
   }, [app.state.sessions]);
 
   const [selectedExercise, setSelectedExercise] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const allExercises = useMemo(() => {
-    const names = new Set<string>();
+    const counts: Record<string, number> = {};
     (app.state.history || []).forEach((h: WorkoutHistory) => {
-      names.add(h.exerciseName);
+      counts[h.exerciseName] = (counts[h.exerciseName] || 0) + 1;
     });
-    return Array.from(names).sort();
+    return Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .map(([name]) => name);
   }, [app.state.history]);
+
+  const filteredExercises = useMemo(() => {
+    if (!searchQuery) return allExercises;
+    return allExercises.filter(ex => ex.toLowerCase().includes(searchQuery.toLowerCase()));
+  }, [allExercises, searchQuery]);
 
   const exerciseStats = useMemo(() => {
     if (!selectedExercise) return null;
@@ -37,8 +48,8 @@ export const ProgressScreen: React.FC<{ app: any }> = ({ app }) => {
 
     sortedHistory.forEach((h: WorkoutHistory) => {
       history.push({
-        date: format(parseISO(h.date), 'dd/MM'),
-        sessionDate: parseISO(h.date),
+        date: format(new Date(h.date + 'T00:00:00'), 'dd/MM'),
+        sessionDate: new Date(h.date + 'T00:00:00'),
         maxLoad: h.load
       });
     });
@@ -140,8 +151,7 @@ export const ProgressScreen: React.FC<{ app: any }> = ({ app }) => {
     let previousWeekVolume = 0;
 
     app.state.history.forEach((h: WorkoutHistory) => {
-      const historyDate = new Date(h.date).getTime();
-      const adjustedHistoryDate = historyDate + new Date(historyDate).getTimezoneOffset() * 60000;
+      const adjustedHistoryDate = new Date(h.date + 'T00:00:00').getTime();
       
       const volume = h.load * h.reps * h.sets;
 
@@ -203,17 +213,50 @@ export const ProgressScreen: React.FC<{ app: any }> = ({ app }) => {
         <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl">
           {/* Seletor */}
           <div className="mb-6 relative">
-            <select 
-              className="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-2xl px-4 py-3 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold italic"
-              value={selectedExercise}
-              onChange={(e) => setSelectedExercise(e.target.value)}
-            >
-              <option value="">Selecione um exercício...</option>
-              {allExercises.map(ex => (
-                <option key={ex} value={ex}>{ex}</option>
-              ))}
-            </select>
-            <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={18} />
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
+              <input 
+                type="text"
+                className="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-2xl pl-12 pr-10 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold italic placeholder:text-zinc-500"
+                placeholder="Buscar exercício..."
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  if (e.target.value === '') setSelectedExercise('');
+                }}
+                onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+              />
+              {searchQuery && (
+                <button 
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedExercise('');
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+                >
+                  <X size={16} />
+                </button>
+              )}
+            </div>
+            
+            {isSearchFocused && filteredExercises.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-800 border border-zinc-700 rounded-2xl shadow-2xl overflow-hidden z-50 max-h-60 overflow-y-auto">
+                {filteredExercises.map(ex => (
+                  <button
+                    key={ex}
+                    className="w-full text-left px-4 py-3 hover:bg-zinc-700 text-sm font-bold italic text-white border-b border-zinc-700/50 last:border-0 transition-colors"
+                    onClick={() => {
+                      setSelectedExercise(ex);
+                      setSearchQuery(ex);
+                      setIsSearchFocused(false);
+                    }}
+                  >
+                    {ex}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Dashboard */}

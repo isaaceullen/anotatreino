@@ -12,7 +12,7 @@ import {
 } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
-import { ChevronLeft, ChevronRight, X, Clock, Dumbbell, Activity, TrendingUp, TrendingDown, Trash2, ChevronDown, ChevronUp, Trophy, Target } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Clock, Dumbbell, Activity, TrendingUp, TrendingDown, Trash2, ChevronDown, ChevronUp, Trophy, Target, Search } from 'lucide-react';
 import { WorkoutHistory } from '../types';
 
 const SessionAccordion: React.FC<{ session: any; index: number; onDelete: (id: string) => void }> = ({ session, index, onDelete }) => {
@@ -29,7 +29,7 @@ const SessionAccordion: React.FC<{ session: any; index: number; onDelete: (id: s
             {index + 1}
           </div>
           <div>
-            <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{format(parseISO(session.date), 'dd/MM/yyyy')} • {session.durationMinutes}min</p>
+            <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{format(new Date(session.date + 'T00:00:00'), 'dd/MM/yyyy')} • {session.durationMinutes}min</p>
             <h4 className="text-lg font-black italic uppercase text-white leading-none">Split {session.groups.join(' + ')}</h4>
           </div>
         </div>
@@ -94,18 +94,27 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDay, setSelectedDay] = useState<Date | null>(null);
   const [selectedExercise, setSelectedExercise] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   const allExercises = useMemo(() => {
-    const names = new Set<string>();
+    const counts: Record<string, number> = {};
     (state.sessions || []).forEach((session: any) => {
       (session.details || []).forEach((detail: any) => {
         if (detail.type === 'strength') {
-          names.add(detail.exerciseName);
+          counts[detail.exerciseName] = (counts[detail.exerciseName] || 0) + 1;
         }
       });
     });
-    return Array.from(names).sort();
+    return Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .map(([name]) => name);
   }, [state.sessions]);
+
+  const filteredExercises = useMemo(() => {
+    if (!searchQuery) return allExercises;
+    return allExercises.filter(ex => ex.toLowerCase().includes(searchQuery.toLowerCase()));
+  }, [allExercises, searchQuery]);
 
   const exerciseStats = useMemo(() => {
     if (!selectedExercise) return null;
@@ -118,8 +127,8 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
       if (detail && detail.type === 'strength' && detail.series && detail.series.length > 0) {
         const maxLoad = Math.max(...detail.series.map((s: any) => s.load));
         history.push({
-          date: format(parseISO(session.date), 'dd/MM'),
-          sessionDate: parseISO(session.date),
+          date: format(new Date(session.date + 'T00:00:00'), 'dd/MM'),
+          sessionDate: new Date(session.date + 'T00:00:00'),
           maxLoad
         });
       }
@@ -175,7 +184,10 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
   }, [currentMonth]);
 
   const getSessionsForDay = (date: Date) => {
-    return (state.sessions || []).filter((s: any) => isSameDay(parseISO(s.date), date));
+    return (state.sessions || []).filter((s: any) => {
+      const sessionDate = new Date(s.date + 'T00:00:00');
+      return isSameDay(sessionDate, date);
+    });
   };
 
   const selectedDaySessions = useMemo(() => {
@@ -244,8 +256,7 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
     let previousWeekVolume = 0;
 
     (state.sessions || []).forEach((session: any) => {
-      const sessionDate = new Date(session.date).getTime();
-      const adjustedSessionDate = sessionDate + new Date(sessionDate).getTimezoneOffset() * 60000;
+      const adjustedSessionDate = new Date(session.date + 'T00:00:00').getTime();
       
       const volume = session.volume || 0;
 
@@ -268,12 +279,6 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
       previousWeekVolume,
       percentageChange: Math.round(percentageChange)
     };
-  }, [state.sessions]);
-
-  const recentSessions = useMemo(() => {
-    return [...(state.sessions || [])]
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-      .slice(0, 10);
   }, [state.sessions]);
 
   const handleDeleteSession = async (sessionId: string) => {
@@ -301,17 +306,50 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
           <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 shadow-xl">
             {/* Seletor */}
             <div className="mb-6 relative">
-              <select 
-                className="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-2xl px-4 py-3 appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold italic"
-                value={selectedExercise}
-                onChange={(e) => setSelectedExercise(e.target.value)}
-              >
-                <option value="">Selecione um exercício...</option>
-                {allExercises.map(ex => (
-                  <option key={ex} value={ex}>{ex}</option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 pointer-events-none" size={18} />
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
+                <input 
+                  type="text"
+                  className="w-full bg-zinc-800 border border-zinc-700 text-white text-sm rounded-2xl pl-12 pr-10 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 font-bold italic placeholder:text-zinc-500"
+                  placeholder="Buscar exercício..."
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    if (e.target.value === '') setSelectedExercise('');
+                  }}
+                  onFocus={() => setIsSearchFocused(true)}
+                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                />
+                {searchQuery && (
+                  <button 
+                    onClick={() => {
+                      setSearchQuery('');
+                      setSelectedExercise('');
+                    }}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+              
+              {isSearchFocused && filteredExercises.length > 0 && (
+                <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-800 border border-zinc-700 rounded-2xl shadow-2xl overflow-hidden z-50 max-h-60 overflow-y-auto">
+                  {filteredExercises.map(ex => (
+                    <button
+                      key={ex}
+                      className="w-full text-left px-4 py-3 hover:bg-zinc-700 text-sm font-bold italic text-white border-b border-zinc-700/50 last:border-0 transition-colors"
+                      onClick={() => {
+                        setSelectedExercise(ex);
+                        setSearchQuery(ex);
+                        setIsSearchFocused(false);
+                      }}
+                    >
+                      {ex}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Dashboard */}
@@ -531,28 +569,6 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
                 );
               })}
             </div>
-          </div>
-        </section>
-
-        {/* HISTÓRICO RECENTE */}
-        <section className="px-2 space-y-4">
-          <div className="flex items-center gap-2 mb-4">
-            <Clock size={20} className="text-zinc-500" />
-            <h3 className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">Histórico Recente</h3>
-          </div>
-          <div className="space-y-4">
-            {recentSessions.length > 0 ? (
-              recentSessions.map((session: any, idx: number) => (
-                <SessionAccordion 
-                  key={session.id} 
-                  session={session} 
-                  index={idx} 
-                  onDelete={handleDeleteSession} 
-                />
-              ))
-            ) : (
-              <p className="text-center py-10 text-zinc-600 italic text-sm">Nenhum treino registrado.</p>
-            )}
           </div>
         </section>
 
