@@ -290,7 +290,7 @@ export const HistoryScreen: React.FC<{ manager: any }> = ({ manager }) => {
 
   return (
     <div className="h-full overflow-y-auto scrollbar-hide">
-      <div className="p-4 pt-10 pb-32 space-y-8 animate-in fade-in duration-500">
+      <div className="p-4 pt-[max(env(safe-area-inset-top),2.5rem)] pb-32 space-y-8 animate-in fade-in duration-500">
         <header className="px-2">
           <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white">Evolução</h2>
           <p className="text-zinc-400 text-sm font-medium mt-1">Seu histórico de alta performance</p>

@@ -85,7 +85,7 @@ export const ConfigScreen: React.FC<{ manager: any }> = ({ manager }) => {
      const hasCardio = exercises.some((e: any) => e.type === 'cardio');
      
      return (
-        <div className="p-6 pb-32 animate-in slide-in-from-right duration-300 h-full overflow-y-auto">
+        <div className="p-6 pt-[max(env(safe-area-inset-top),2.5rem)] pb-32 animate-in slide-in-from-right duration-300 h-full overflow-y-auto">
            <header className="flex items-center gap-4 mb-8">
               <button onClick={() => setEditingGroup(null)} className="p-2 bg-zinc-900 rounded-xl text-zinc-400"><ChevronLeft size={20}/></button>
               <div className="flex-1">
@@ -179,7 +179,7 @@ export const ConfigScreen: React.FC<{ manager: any }> = ({ manager }) => {
   // View: Main Config
   return (
     <div className="h-full overflow-y-auto scrollbar-hide">
-      <div className="p-6 space-y-10 animate-in fade-in duration-500 pb-32">
+      <div className="p-6 pt-[max(env(safe-area-inset-top),2.5rem)] space-y-10 animate-in fade-in duration-500 pb-32">
         <header className="pt-4">
           <h2 className="text-3xl font-black italic uppercase tracking-tighter leading-none">Ajustes</h2>
         </header>

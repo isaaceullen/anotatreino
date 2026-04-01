@@ -183,7 +183,7 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
   // --- RENDER: CONFIGURAÇÃO (LOTE) ---
   if (activeStep === 'config') {
     return (
-      <div className="p-6 pb-40 animate-in slide-in-from-right duration-300">
+      <div className="p-6 pt-[max(env(safe-area-inset-top),2.5rem)] pb-40 animate-in slide-in-from-right duration-300">
         <header className="flex justify-between items-center mb-6 sticky top-0 bg-black z-20 py-4 -mx-6 px-6 border-b border-zinc-900">
           <button onClick={() => setActiveStep('catalog')} className="text-zinc-500 font-bold text-xs uppercase tracking-widest flex items-center gap-1 hover:text-white transition-colors">
              <ArrowLeft size={16}/> Voltar
@@ -261,7 +261,7 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
 
   // --- RENDER: CATÁLOGO (SELEÇÃO) ---
   return (
-    <div className="p-6 space-y-6 animate-in fade-in duration-500 pb-40">
+    <div className="p-6 pt-[max(env(safe-area-inset-top),2.5rem)] space-y-6 animate-in fade-in duration-500 pb-40">
 
     
       <header className="flex flex-col gap-4 pt-2 relative z-30">

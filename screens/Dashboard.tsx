@@ -41,7 +41,7 @@ export const Dashboard: React.FC<{ app: any }> = ({ app }) => {
     );
 
     return (
-      <div className="p-4 animate-in fade-in slide-in-from-right-10 duration-500 pb-32">
+      <div className="p-4 pt-[max(env(safe-area-inset-top),2.5rem)] animate-in fade-in slide-in-from-right-10 duration-500 pb-32">
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-black italic uppercase text-blue-500">Treino {activeGroup}</h1>
@@ -113,7 +113,7 @@ export const Dashboard: React.FC<{ app: any }> = ({ app }) => {
   }
 
   return (
-    <div className="p-6 pt-12 flex flex-col items-center text-center animate-in fade-in duration-700">
+    <div className="p-6 pt-[max(env(safe-area-inset-top),2.5rem)] flex flex-col items-center text-center animate-in fade-in duration-700">
       <div className="w-20 h-20 bg-blue-600 rounded-3xl flex items-center justify-center mb-8 shadow-2xl shadow-blue-900/40 rotate-12">
         <Dumbbell size={40} className="text-white -rotate-12" />
       </div>

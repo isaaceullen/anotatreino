@@ -37,7 +37,7 @@ export const HomeScreen: React.FC<{ manager: any }> = ({ manager }) => {
   const activeGroups = GROUPS.filter(g => getExerciseCountForGroup(g) > 0);
 
   return (
-    <div className="p-6 space-y-8 animate-in fade-in duration-500">
+    <div className="p-6 pt-[max(env(safe-area-inset-top),2.5rem)] space-y-8 animate-in fade-in duration-500">
       <header className="pt-4 flex justify-between items-start">
         <div>
           <h1 className="text-4xl font-black italic uppercase tracking-tighter leading-none">
