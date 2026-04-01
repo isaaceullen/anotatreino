@@ -253,9 +253,13 @@ export const useWorkoutManager = () => {
       });
     }
 
+    const tzOffset = (new Date()).getTimezoneOffset() * 60000;
+    const localISOTime = (new Date(Date.now() - tzOffset)).toISOString().slice(0, -1);
+    const correctDateString = localISOTime.split('T')[0];
+
     const newSession: Session = {
       id: crypto.randomUUID(),
-      date: new Date().toISOString().split('T')[0],
+      date: correctDateString,
       startTime: activeDraft.startTime,
       endTime,
       durationMinutes,

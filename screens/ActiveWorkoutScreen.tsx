@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Timer as TimerIcon, Save, XCircle, ChevronRight, Check, ArrowUp, ArrowDown, Activity, ListOrdered, Minus, Plus, MoreVertical, Trash2, Settings } from 'lucide-react';
+import { Timer as TimerIcon, Save, XCircle, ChevronRight, Check, ArrowUp, ArrowDown, Activity, ListOrdered, Minus, Plus, MoreVertical, Trash2, Settings, AlertTriangle } from 'lucide-react';
 import { RestTimerOverlay } from '../components/RestTimerOverlay';
 import { ExercisesScreen } from './ExercisesScreen';
 import { CARDIO_MASTER_ID } from '../constants';
@@ -190,15 +190,42 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
     if (confirm) cancelWorkout();
   };
 
+  const getIncompleteExercisesCount = () => {
+    if (!activeDraft) return 0;
+    let count = 0;
+    Object.entries(activeDraft.exercises).forEach(([exId, series]) => {
+      const ex = state.exercises.find((e: any) => e.id === exId);
+      if (ex && ex.type === 'strength') {
+        const hasCompletedSeries = (series as any[]).some(s => s.completed);
+        if (!hasCompletedSeries) count++;
+      }
+    });
+    return count;
+  };
+
+  const incompleteCount = getIncompleteExercisesCount();
+
   if (showSummary) {
     return (
-      <div className="min-h-screen bg-black p-6 flex flex-col animate-in slide-in-from-right duration-300">
-        <header className="mb-10 pt-10 text-center">
+      <div className="min-h-screen bg-black p-6 flex flex-col animate-in slide-in-from-right duration-300 pt-[max(env(safe-area-inset-top),3rem)]">
+        <header className="mb-10 text-center">
           <div className="w-20 h-20 bg-blue-600 rounded-3xl mx-auto flex items-center justify-center mb-6 shadow-2xl shadow-blue-600/30">
             <Save size={40} />
           </div>
           <h2 className="text-3xl font-black italic uppercase">Resumo da Missão</h2>
         </header>
+
+        {incompleteCount > 0 && (
+          <div className="bg-orange-900/30 border border-orange-500/50 rounded-2xl p-4 mb-6 flex items-start gap-3">
+            <AlertTriangle className="text-orange-500 shrink-0 mt-0.5" size={20} />
+            <div>
+              <h4 className="text-orange-500 font-black uppercase text-xs tracking-widest mb-1">Atenção</h4>
+              <p className="text-orange-200/80 text-sm font-medium">
+                Você deixou <span className="font-black text-orange-400">{incompleteCount}</span> {incompleteCount === 1 ? 'exercício incompleto' : 'exercícios incompletos'} (nenhuma série marcada).
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-4 mb-8">
           <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-[2rem] text-center">
@@ -232,7 +259,7 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
   return (
     <div className="h-screen flex flex-col bg-black">
       {/* 1. CABEÇALHO FIXO DO APP */}
-      <header className="flex-none bg-black/80 backdrop-blur-xl z-50 px-6 py-4 border-b border-zinc-900 flex justify-between items-center transition-all">
+      <header className="flex-none bg-black/80 backdrop-blur-xl z-50 px-6 pb-4 pt-[max(env(safe-area-inset-top),1.5rem)] border-b border-zinc-900 flex justify-between items-center transition-all">
         {isReordering ? (
           <>
             <button onClick={toggleReorderMode} className="text-zinc-500 font-bold uppercase text-[10px] tracking-widest">Cancelar</button>
