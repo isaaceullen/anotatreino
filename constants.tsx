@@ -416,7 +416,7 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   "id": "custom_ex_104",
   "name": "Rosca Scott unilateral com halteres",
   "targetMuscles": ["Bíceps"],
-  "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/11/Rosca-Scott-com-halteres-unilateral.gif
+  "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/11/Rosca-Scott-com-halteres-unilateral.gif"
   },
   {
   "id": "custom_ex_105",

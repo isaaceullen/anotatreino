@@ -81,6 +81,7 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
   const [expandedGif, setExpandedGif] = useState<string | null>(null);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [showExercisesModal, setShowExercisesModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   
   // Reordering State
   const [isReordering, setIsReordering] = useState(false);
@@ -91,15 +92,15 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
   const [timeoutSeconds, setTimeoutSeconds] = useState(300); 
   const inactivityCheckRef = useRef<any>(null);
 
-  const handleDeleteExercise = (exId: string) => {
-    showDialog(
+  const handleDeleteExercise = async (exId: string) => {
+    const confirm = await showDialog(
       'confirm',
       'Excluir Exercício',
-      'Excluir permanentemente este exercício deste grupo?',
-      () => {
-        manager.removeExercise(exId);
-      }
+      'Excluir permanentemente este exercício deste grupo?'
     );
+    if (confirm) {
+      manager.removeExercise(exId);
+    }
   };
 
   useEffect(() => {
@@ -315,15 +316,15 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
               </button>
 
               <button 
-                onClick={() => { setIsBottomSheetOpen(false); setShowExercisesModal(true); }}
+                onClick={() => { setIsBottomSheetOpen(false); setIsEditing(true); }}
                 className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-zinc-800 transition-colors text-left"
               >
                 <div className="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-green-500">
-                  <Plus size={20} />
+                  <Settings size={20} />
                 </div>
                 <div>
-                  <h3 className="font-black uppercase italic text-sm text-white">Adicionar Exercícios</h3>
-                  <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Busque no acervo</p>
+                  <h3 className="font-black uppercase italic text-sm text-white">Editar Exercícios</h3>
+                  <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">Adicione ou exclua</p>
                 </div>
               </button>
             </div>
@@ -346,6 +347,22 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
 
       {/* 2. CORPO SCROLLÁVEL */}
       <div className="flex-1 overflow-y-auto scrollbar-hide p-4 space-y-6 pb-40">
+        {isEditing && (
+          <div className="flex gap-3 mb-2 animate-in fade-in duration-300">
+            <button 
+              onClick={() => setShowExercisesModal(true)}
+              className="flex-1 py-4 border-2 border-dashed border-blue-500/50 rounded-2xl text-blue-500 font-black uppercase text-xs tracking-widest flex items-center justify-center gap-2 hover:bg-blue-500/10 transition-colors"
+            >
+              <Plus size={16} /> Adicionar
+            </button>
+            <button 
+              onClick={() => setIsEditing(false)}
+              className="flex-1 py-4 bg-blue-600 rounded-2xl text-white font-black uppercase text-xs tracking-widest flex items-center justify-center gap-2 hover:bg-blue-500 transition-colors shadow-lg shadow-blue-600/20"
+            >
+              <Check size={16} /> Concluir Edição
+            </button>
+          </div>
+        )}
         {isReordering ? (
           <div className="space-y-3 animate-in fade-in duration-300">
              <div className="bg-blue-900/10 border border-blue-500/20 rounded-2xl p-4 mb-6 text-center">
@@ -394,9 +411,11 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
                       <h4 className="text-base font-black italic uppercase text-white whitespace-normal leading-tight">{displayName}</h4>
                     </div>
                     <div className="flex gap-2">
-                      <button onClick={() => handleDeleteExercise(exId)} className="p-2 bg-zinc-800 rounded-xl text-zinc-400 hover:text-red-500 transition-colors">
-                        <Trash2 size={16} />
-                      </button>
+                      {isEditing && (
+                        <button onClick={() => handleDeleteExercise(exId)} className="p-2 bg-zinc-800 rounded-xl text-zinc-400 hover:text-red-500 transition-colors">
+                          <Trash2 size={16} />
+                        </button>
+                      )}
                       <div className="p-2 bg-zinc-800 rounded-xl text-zinc-400">
                         <Activity size={16} />
                       </div>
@@ -427,12 +446,14 @@ export const ActiveWorkoutScreen: React.FC<{ manager: any }> = ({ manager }) => 
                 
                 {/* 2.1 CABEÇALHO DO CARD (GIF + INFO) */}
                 <div className="p-4 flex gap-4 border-b border-zinc-800/50 relative">
-                   <button 
-                     onClick={() => handleDeleteExercise(exId)} 
-                     className="absolute top-4 right-4 p-2 bg-zinc-800 rounded-xl text-zinc-400 hover:text-red-500 transition-colors z-10"
-                   >
-                     <Trash2 size={16} />
-                   </button>
+                   {isEditing && (
+                     <button 
+                       onClick={() => handleDeleteExercise(exId)} 
+                       className="absolute top-4 right-4 p-2 bg-zinc-800 rounded-xl text-zinc-400 hover:text-red-500 transition-colors z-10"
+                     >
+                       <Trash2 size={16} />
+                     </button>
+                   )}
                    <div 
                      className="w-28 h-28 flex-none bg-black rounded-2xl overflow-hidden relative cursor-pointer border border-zinc-800"
                      onClick={() => displayUrl && setExpandedGif(displayUrl)}
