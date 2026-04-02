@@ -399,6 +399,30 @@ export const MASTER_EXERCISES: MasterExercise[] = [
     "name": "Agachamento sumô",
     "targetMuscles": ["Perna", "Quadríceps", "Glúteo", "Adutores"],
     "gifUrl": "https://image.tuasaude.com/media/article/qu/vm/agachamento-sumo_75036.gif"
+  },
+  {
+  "id": "custom_ex_102",
+  "name": "Remada alta com Barra reta",
+  "targetMuscles": ["Ombro", "Trapézio"],
+  "gifUrl": "https://image.tuasaude.com/media/article/yg/rt/remada_75620.gif"
+  },
+  {
+  "id": "custom_ex_103",
+  "name": "Banco Lombar",
+  "targetMuscles": ["Costas"],
+  "gifUrl": "https://fitnessprogramer.com/wp-content/uploads/2021/02/hyperextension.gif"
+  },
+  {
+  "id": "custom_ex_104",
+  "name": "Rosca Scott unilateral com halteres",
+  "targetMuscles": ["Bíceps"],
+  "gifUrl": "https://www.mundoboaforma.com.br/wp-content/uploads/2020/11/Rosca-Scott-com-halteres-unilateral.gif
+  },
+  {
+  "id": "custom_ex_105",
+  "name": "Tríceps testa com Barra reta",
+  "targetMuscles": ["Tríceps"],
+  "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/02/barbell-lying-triceps-extension-skull-crusher.gif"
   }
 ];
 
