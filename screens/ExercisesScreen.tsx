@@ -60,7 +60,10 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
   const [activeStep, setActiveStep] = useState<'catalog' | 'config'>('catalog');
   const [search, setSearch] = useState('');
   const [selectedMuscle, setSelectedMuscle] = useState<string | null>(null);
-  const [showOnlyAdded, setShowOnlyAdded] = useState(false);
+  const [showOnlyAdded, setShowOnlyAdded] = useState(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    return !!searchParams.get('group');
+  });
   const [isGroupDropdownOpen, setIsGroupDropdownOpen] = useState(false);
   
   // Lista de exercícios selecionados para o lote
@@ -71,11 +74,6 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
     const group = searchParams.get('group');
     return (group as GroupLetter) || null;
   });
-
-  // Limpar filtro ao mudar de grupo
-  React.useEffect(() => {
-    setShowOnlyAdded(false);
-  }, [targetGroup]);
 
   // Músculos únicos (agregado de arrays)
   const muscles = useMemo(() => {
@@ -96,7 +94,7 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
       
       const matchesMuscle = !selectedMuscle || m.targetMuscles.includes(selectedMuscle);
 
-      const isAlreadyInGroup = state.exercises.some((e: any) => e.groupId === targetGroup && e.masterId === m.id);
+      const isAlreadyInGroup = targetGroup ? state.exercises.some((e: any) => e.groupId === targetGroup && e.masterId === m.id) : false;
       const matchesAddedFilter = !showOnlyAdded || isAlreadyInGroup;
 
       return matchesSearch && matchesMuscle && matchesAddedFilter;
@@ -105,6 +103,8 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
 
   // Lógica de Toggle (Batch Selection)
   const toggleSelection = (master: MasterExercise) => {
+    if (!targetGroup) return; // Prevent adding if no group selected
+    
     const isSelected = selection.some(item => item.masterId === master.id);
     
     // Verificar se já existe no grupo alvo
@@ -184,47 +184,6 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
       }
     }
   };
-
-  // --- RENDER: BOAS-VINDAS ---
-  if (!targetGroup) {
-    return (
-      <div className="h-full flex flex-col items-center justify-center p-6 text-center animate-in fade-in duration-500 pt-[max(env(safe-area-inset-top),2.5rem)]">
-        <div className="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center mb-8 shadow-2xl shadow-blue-900/40">
-          <Dumbbell size={48} className="text-white" />
-        </div>
-        <h2 className="text-3xl font-black italic uppercase mb-4">Acervo de Exercícios</h2>
-        <p className="text-zinc-400 font-medium mb-8">Selecione um grupo muscular para começar a montar seu treino.</p>
-        <button 
-          onClick={() => setIsGroupDropdownOpen(true)}
-          className="bg-blue-600 text-white font-black uppercase tracking-widest py-4 px-8 rounded-full shadow-lg shadow-blue-900/20 hover:bg-blue-500 transition-all active:scale-95"
-        >
-          Configurar um Treino
-        </button>
-        
-        {isGroupDropdownOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-6" onClick={() => setIsGroupDropdownOpen(false)}>
-            <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 w-full max-w-sm animate-in zoom-in-95" onClick={e => e.stopPropagation()}>
-              <h3 className="text-xl font-black italic uppercase text-center mb-6">Escolha o Grupo</h3>
-              <div className="grid grid-cols-3 gap-3">
-                {GROUPS.map(g => (
-                  <button
-                    key={g}
-                    onClick={() => {
-                      setTargetGroup(g);
-                      setIsGroupDropdownOpen(false);
-                    }}
-                    className="bg-zinc-800 hover:bg-blue-600 text-white font-black text-2xl py-6 rounded-2xl transition-colors"
-                  >
-                    {g}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  }
 
   // --- RENDER: CONFIGURAÇÃO (LOTE) ---
   if (activeStep === 'config') {
@@ -313,13 +272,22 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
       <header className="flex flex-col gap-4 pt-2 relative z-30">
         <div className="flex justify-between items-start">
           <div className="flex flex-col gap-2 relative">
-            <button 
-              onClick={() => !isModal && setIsGroupDropdownOpen(!isGroupDropdownOpen)}
-              className={`flex items-center gap-2 text-3xl font-black italic uppercase tracking-tighter transition-colors text-left leading-none ${isModal ? 'cursor-default' : 'hover:text-zinc-300'}`}
-            >
-              TREINO<br/>GRUPO {targetGroup}
-              {!isModal && <ChevronDown size={24} className={`transition-transform duration-300 ${isGroupDropdownOpen ? 'rotate-180' : ''}`} />}
-            </button>
+            {targetGroup === null ? (
+              <button 
+                onClick={() => !isModal && setIsGroupDropdownOpen(!isGroupDropdownOpen)}
+                className={`flex items-center gap-2 text-xl font-black italic uppercase tracking-tighter transition-colors text-left leading-none bg-blue-600 text-white px-4 py-3 rounded-2xl shadow-lg shadow-blue-600/30 ${isModal ? 'cursor-default' : 'hover:bg-blue-500'}`}
+              >
+                <Plus size={20} /> CONFIGURAR TREINO
+              </button>
+            ) : (
+              <button 
+                onClick={() => !isModal && setIsGroupDropdownOpen(!isGroupDropdownOpen)}
+                className={`flex items-center gap-2 text-3xl font-black italic uppercase tracking-tighter transition-colors text-left leading-none ${isModal ? 'cursor-default' : 'hover:text-zinc-300'}`}
+              >
+                EDITANDO:<br/>GRUPO {targetGroup}
+                {!isModal && <ChevronDown size={24} className={`transition-transform duration-300 ${isGroupDropdownOpen ? 'rotate-180' : ''}`} />}
+              </button>
+            )}
             
             {selection.length > 0 && (
               <span className="bg-blue-600 text-white px-2 py-1 rounded-md text-[10px] font-black uppercase tracking-widest animate-pulse self-start">
@@ -348,11 +316,21 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
           </div>
           
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => setShowOnlyAdded(!showOnlyAdded)}
-              className={`p-2 rounded-full transition-colors border ${showOnlyAdded ? 'bg-blue-600 text-white border-blue-500' : 'bg-zinc-900 text-zinc-500 border-zinc-800 hover:text-white'}`}
+            {targetGroup && (
+              <button
+                onClick={() => setShowOnlyAdded(!showOnlyAdded)}
+                className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors border whitespace-nowrap ${showOnlyAdded ? 'bg-blue-600 text-white border-blue-500' : 'bg-zinc-900 text-zinc-500 border-zinc-800 hover:text-white'}`}
+              >
+                <Filter size={12} />
+                {showOnlyAdded ? 'Ver Todos' : 'Filtrar'}
+              </button>
+            )}
+            <button 
+              onClick={() => setActiveStep('config')}
+              disabled={selection.length === 0}
+              className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${selection.length > 0 ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30' : 'bg-zinc-900 text-zinc-600 border border-zinc-800'}`}
             >
-              <Filter size={16} />
+              <Check size={24} />
             </button>
           </div>
         </div>
@@ -436,7 +414,7 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
                          <div className="w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center text-zinc-500">
                            <Lock size={16} />
                          </div>
-                       ) : (
+                       ) : targetGroup ? (
                          <div className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all ${
                             isSelected 
                               ? 'bg-blue-600 border-blue-500 text-white scale-110 shadow-lg' 
@@ -444,7 +422,7 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
                          }`}>
                             {isSelected ? <Check size={18} strokeWidth={3} /> : <Plus size={18} />}
                          </div>
-                       )}
+                       ) : null}
                     </div>
 
                     {/* Badge de Uso em Outros Grupos */}
