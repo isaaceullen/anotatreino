@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { Search, Plus, Trash2, Save, Minus, Activity, Dumbbell, Check, ChevronRight, ArrowLeft, Lock, XCircle, ChevronDown } from 'lucide-react';
+import { Search, Plus, Trash2, Save, Minus, Activity, Dumbbell, Check, ChevronRight, ArrowLeft, Lock, XCircle, ChevronDown, Filter } from 'lucide-react';
 import { Exercise, MasterExercise, GROUPS, GroupLetter } from '../types';
 import { MASTER_EXERCISES, CARDIO_MASTER_ID } from '../constants';
 
@@ -65,12 +65,17 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
   
   // Lista de exercícios selecionados para o lote
   const [selection, setSelection] = useState<any[]>([]);
-  const [targetGroup, setTargetGroup] = useState<GroupLetter>(() => {
+  const [targetGroup, setTargetGroup] = useState<GroupLetter | null>(() => {
     if (isModal && modalTargetGroup) return modalTargetGroup;
     const searchParams = new URLSearchParams(window.location.search);
     const group = searchParams.get('group');
-    return (group as GroupLetter) || 'A';
+    return (group as GroupLetter) || null;
   });
+
+  // Limpar filtro ao mudar de grupo
+  React.useEffect(() => {
+    setShowOnlyAdded(false);
+  }, [targetGroup]);
 
   // Músculos únicos (agregado de arrays)
   const muscles = useMemo(() => {
@@ -179,6 +184,47 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
       }
     }
   };
+
+  // --- RENDER: BOAS-VINDAS ---
+  if (!targetGroup) {
+    return (
+      <div className="h-full flex flex-col items-center justify-center p-6 text-center animate-in fade-in duration-500 pt-[max(env(safe-area-inset-top),2.5rem)]">
+        <div className="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center mb-8 shadow-2xl shadow-blue-900/40">
+          <Dumbbell size={48} className="text-white" />
+        </div>
+        <h2 className="text-3xl font-black italic uppercase mb-4">Acervo de Exercícios</h2>
+        <p className="text-zinc-400 font-medium mb-8">Selecione um grupo muscular para começar a montar seu treino.</p>
+        <button 
+          onClick={() => setIsGroupDropdownOpen(true)}
+          className="bg-blue-600 text-white font-black uppercase tracking-widest py-4 px-8 rounded-full shadow-lg shadow-blue-900/20 hover:bg-blue-500 transition-all active:scale-95"
+        >
+          Configurar um Treino
+        </button>
+        
+        {isGroupDropdownOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-6" onClick={() => setIsGroupDropdownOpen(false)}>
+            <div className="bg-zinc-900 border border-zinc-800 rounded-3xl p-6 w-full max-w-sm animate-in zoom-in-95" onClick={e => e.stopPropagation()}>
+              <h3 className="text-xl font-black italic uppercase text-center mb-6">Escolha o Grupo</h3>
+              <div className="grid grid-cols-3 gap-3">
+                {GROUPS.map(g => (
+                  <button
+                    key={g}
+                    onClick={() => {
+                      setTargetGroup(g);
+                      setIsGroupDropdownOpen(false);
+                    }}
+                    className="bg-zinc-800 hover:bg-blue-600 text-white font-black text-2xl py-6 rounded-2xl transition-colors"
+                  >
+                    {g}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
 
   // --- RENDER: CONFIGURAÇÃO (LOTE) ---
   if (activeStep === 'config') {
@@ -304,9 +350,9 @@ export const ExercisesScreen: React.FC<{ manager: any, isModal?: boolean, modalT
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowOnlyAdded(!showOnlyAdded)}
-              className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-colors border whitespace-nowrap ${showOnlyAdded ? 'bg-blue-600 text-white border-blue-500' : 'bg-zinc-900 text-zinc-500 border-zinc-800 hover:text-white'}`}
+              className={`p-2 rounded-full transition-colors border ${showOnlyAdded ? 'bg-blue-600 text-white border-blue-500' : 'bg-zinc-900 text-zinc-500 border-zinc-800 hover:text-white'}`}
             >
-              {showOnlyAdded ? 'Ver Todos' : 'Filtrar'}
+              <Filter size={16} />
             </button>
           </div>
         </div>

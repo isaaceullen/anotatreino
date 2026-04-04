@@ -221,9 +221,16 @@ export const ConfigScreen: React.FC<{ manager: any }> = ({ manager }) => {
                                <Trash2 size={16} />
                              </button>
                            )}
-                           <div className="text-xs font-bold text-blue-500 uppercase tracking-widest flex items-center gap-1">
+                           <button 
+                             onClick={(e) => {
+                               e.stopPropagation();
+                               window.history.pushState(null, '', `/exercises?group=${g}`);
+                               window.dispatchEvent(new Event('pushstate'));
+                             }}
+                             className="text-xs font-bold text-blue-500 uppercase tracking-widest flex items-center gap-1 hover:text-white transition-colors"
+                           >
                              Editar <Edit size={12} />
-                           </div>
+                           </button>
                          </div>
                       </div>
                       

@@ -423,6 +423,12 @@ export const MASTER_EXERCISES: MasterExercise[] = [
   "name": "Tríceps testa com Barra reta",
   "targetMuscles": ["Tríceps"],
   "gifUrl": "https://www.hipertrofia.org/blog/wp-content/uploads/2024/02/barbell-lying-triceps-extension-skull-crusher.gif"
+  },
+  {
+  "id": "custom_ex_106",
+  "name": "Elevação lateral conjugado com frontal",
+  "targetMuscles": ["Ombro"],
+  "gifUrl": "PLACEHOLDER"
   }
 ];
 
